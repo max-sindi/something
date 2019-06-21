@@ -3,18 +3,17 @@ import styl from 'styled-components'
 
 
 export const FullScreenStyled = styl.div`
-  position: absolute;
-  width: 100%;
-  height: 100%
-  top: 0
-  left: 0
+  height: 100vh
+  width: 100vw
 `
 
 export const FocusedEffects = styl.div`
-  background-color: red
+  background-color: ${pr => pr.isFocused ? 'red' : 'green'}
 `
 
 export const TypeableFieldDimensions = styl(FocusedEffects)`
+  padding: 10px
   height: 80vh
   width: 90vw
+  box-sizing: border-box
 `
