@@ -1,5 +1,5 @@
 import { createStore, applyMiddleware, compose } from 'redux'
-import reducers from './reducers/'
+import reducers from './modules/'
 import thunk from 'redux-thunk'
 import { offline } from '@redux-offline/redux-offline'
 import offlineConfig from '@redux-offline/redux-offline/lib/defaults'
@@ -15,7 +15,6 @@ axios.defaults.baseURL = 'http://localhost:8000/api/'
 function* rootSaga() {
     yield createRequestInstance({ driver: createDriver(axios) })
     yield watchRequests()
-
 }
 
 const saga = createSaga()
@@ -25,7 +24,7 @@ const store = createStore(
     reducers,
     compose(
         applyMiddleware(thunk, requestsPromiseMiddleware(), saga, logger),
-        offline(offlineConfig),
+        // offline(offlineConfig),
         window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
     )
 

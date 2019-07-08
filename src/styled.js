@@ -3,7 +3,7 @@ import style from 'styled-components'
 import {onlineGreen, onlineRed, onlineYellow} from './colors'
 
 export const PageWrapper = style.div`
-display: flex;
+  display: flex;
 `
 
 export const Cover = style.div`

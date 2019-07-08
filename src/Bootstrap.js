@@ -1,17 +1,23 @@
 import React, { Component } from 'react';
 import {BrowserRouter as Router, Route, } from 'react-router-dom'
 import Dashboard from './pages/Dashboard'
-import { checkIsLogged } from './store/reducers/auth'
-import { connect } from 'react-redux'
+import MyProjects from './pages/MyProjects'
+import Weather from './pages/Weather'
+import Users from './pages/Users'
+import {checkIsLogged} from './store/modules/auth'
+import {connect} from 'react-redux'
 import OnlineIndicator from './OnlineIndicator'
-import Sidebar from './components/Sidebar'
+import Sidebar from './components/sidebar/Sidebar'
 import Main from './components/Main'
+import {fetchCities} from './store/modules/cities'
+
 import {PageWrapper} from './styled'
 
 class Bootstrap extends Component {
 
   componentWillMount() {
     this.props.checkIsLogged()
+    this.props.fetchCities()
   }
 
   render() {
@@ -23,6 +29,9 @@ class Bootstrap extends Component {
             <Sidebar></Sidebar>
             <Main>
               <Route exact path={'/'} component={Dashboard}/>
+              <Route exact path={'/my-projects'} component={MyProjects}/>
+              <Route exact path={'/users'} component={Users}/>
+              <Route exact path={'/weather'} component={Weather}/>
             </Main>
           </Router>
         </PageWrapper>
@@ -32,4 +41,4 @@ class Bootstrap extends Component {
 
 }
 
-export default connect(null, { checkIsLogged })(Bootstrap);
+export default connect(null, { checkIsLogged, fetchCities })(Bootstrap);

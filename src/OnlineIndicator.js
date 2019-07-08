@@ -1,6 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {checkOnline} from './store/reducers/online'
+import {checkOnline} from './store/modules/online'
 import {OnlineMark, OnlineOuter, OnlineMarkText} from './styled'
 
 class OnlineIndicator extends React.Component {
