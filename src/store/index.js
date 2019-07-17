@@ -1,8 +1,6 @@
 import { createStore, applyMiddleware, compose } from 'redux'
 import reducers from './modules/'
 import thunk from 'redux-thunk'
-import { offline } from '@redux-offline/redux-offline'
-import offlineConfig from '@redux-offline/redux-offline/lib/defaults'
 import { requestsPromiseMiddleware } from 'redux-saga-requests'
 import createSaga from 'redux-saga'
 import { createRequestInstance, watchRequests } from 'redux-saga-requests'

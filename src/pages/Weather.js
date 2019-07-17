@@ -19,17 +19,17 @@ class Users extends React.Component {
   }
 
   render() {
-    const {cities, citiesAreFetching} = this.props
+    const {cities} = this.props
     const {selectedCityId} = this.state
     return (
       <div style={{padding: 30, width: '100%'}}>
-        {cities.fetching ? <>Loading...</> :
+        {cities.fetching ? <>Loading...</> : (cities.length === 0 ? 'There should be city select but cities has not been fetched' :
           <Select
-            value={console.log(selectedCityId) || selectedCityId}
+            value={cities.find(cityObj => cityObj.value === selectedCityId)}
             options={cities}
             width={400}
             onChange={this.onSelect}
-          />
+          />)
         }
       </div>
     )

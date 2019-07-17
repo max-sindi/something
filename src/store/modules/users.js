@@ -1,12 +1,25 @@
 import api from '../../apiUrls'
-import {success, error} from "redux-saga-requests";
+import {success} from "redux-saga-requests";
+
 
 
 const FETCH_USERS = 'FETCH_USERS'
+const COMMENT_USER = 'COMMENT_USER'
+
+export const commentUser = userId => ({
+  type: COMMENT_USER,
+  request: {
+    url: api.user.comment(userId),
+    method: 'post',
+    data: {
+      commentBody: 'alcatraz'
+    }
+  }
+})
 export const fetchUsers = () => ({
   type: FETCH_USERS,
   request: {
-    url: api.users,
+    url: api.user.user,
   }
 })
 

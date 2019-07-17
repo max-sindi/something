@@ -4,7 +4,9 @@
   "private": true,
   "dependencies": {
     "@redux-offline/redux-offline": "^2.5.1",
+    "antd": "^3.20.2",
     "axios": "^0.19.0",
+    "lodash": "^4.17.13",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-native-listener": "^1.1.0",

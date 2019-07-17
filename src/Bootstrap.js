@@ -10,6 +10,7 @@ import OnlineIndicator from './OnlineIndicator'
 import Sidebar from './components/sidebar/Sidebar'
 import Main from './components/Main'
 import {fetchCities} from './store/modules/cities'
+import ObjectExplorer from './lib/ObjectExplorer'
 
 import {PageWrapper} from './styled'
 
@@ -24,6 +25,7 @@ class Bootstrap extends Component {
     return (
       <div style={{width: '100vw', height: '100vh', display: 'flex', }}>
         <OnlineIndicator />
+        <ObjectExplorer data={this.props.store} objectKey={'store'}/>
         <PageWrapper>
           <Router>
             <Sidebar></Sidebar>
@@ -41,4 +43,4 @@ class Bootstrap extends Component {
 
 }
 
-export default connect(null, { checkIsLogged, fetchCities })(Bootstrap);
+export default connect(store => ({ store }), { checkIsLogged, fetchCities })(Bootstrap);

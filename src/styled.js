@@ -1,6 +1,6 @@
 import BG from './assets/BG.jpg'
 import style from 'styled-components'
-import {onlineGreen, onlineRed, onlineYellow} from './colors'
+import {onlineGreen, onlineRed} from './colors'
 
 export const PageWrapper = style.div`
   display: flex;

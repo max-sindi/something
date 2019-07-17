@@ -1,5 +1,5 @@
 import api from '../../apiUrls'
-import {success, error} from "redux-saga-requests";
+import {success} from "redux-saga-requests";
 
 const FETCH_WEATHER = 'FETCH_WEATHER'
 const SELECT_CITY = 'SELECT_CITY'

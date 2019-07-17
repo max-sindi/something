@@ -1,5 +1,5 @@
 .App {
-  text-align: center;
+  /*text-align: center;*/
 }
 
 .App-logo {
@@ -30,4 +30,38 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.w100 {
+  width: 100%;
+}
+.df {
+  display: flex;
+}
+.jcc {
+  justify-content: center;
+}
+.aic {
+  align-items: center;
+}
+.pl2 {
+  padding-left: 2rem;
+}
+
+.relative {
+  position: relative;
+}
+
+.absolute {
+  position: absolute;
+}
+
+.right-top-corner {
+  right: 15px;
+  top: 15px;
+}
+
+.left-top-corner {
+  left: 15px;
+  top: 15px;
 }
