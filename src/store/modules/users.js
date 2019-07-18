@@ -4,6 +4,7 @@ import {success} from "redux-saga-requests";
 
 
 const FETCH_USERS = 'FETCH_USERS'
+const FETCH_USER = 'FETCH_USER'
 const COMMENT_USER = 'COMMENT_USER'
 
 export const commentUser = userId => ({
@@ -22,6 +23,14 @@ export const fetchUsers = () => ({
     url: api.user.user,
   }
 })
+export const fetchUser = (userId) => ({
+  type: FETCH_USER,
+  request: {
+    url: `user/${userId}`,
+  }
+})
+
+
 
 const initialState = {
   usersList: [],
@@ -40,6 +49,14 @@ export default (state = initialState, { type, payload, data }) => {
         }, {})
       }
     }
+    case success(FETCH_USER):
+      return {
+        ...state,
+        usersStore: {
+          ...state.usersStore,
+          [data.id]: data
+        }
+      }
     default: return state;
   }
 }

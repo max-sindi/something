@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {BrowserRouter as Router, Route, } from 'react-router-dom'
 import Dashboard from './pages/Dashboard'
 import MyProjects from './pages/MyProjects'
+import UserProfile from './pages/UserProfile'
 import Weather from './pages/Weather'
 import Users from './pages/Users'
 import {checkIsLogged} from './store/modules/auth'
@@ -33,6 +34,7 @@ class Bootstrap extends Component {
               <Route exact path={'/'} component={Dashboard}/>
               <Route exact path={'/my-projects'} component={MyProjects}/>
               <Route exact path={'/users'} component={Users}/>
+              <Route exact path={'/user/:userId'} component={UserProfile}/>
               <Route exact path={'/weather'} component={Weather}/>
             </Main>
           </Router>

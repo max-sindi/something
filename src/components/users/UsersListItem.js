@@ -3,7 +3,8 @@ import styled from 'styled-components'
 import {connect}from 'react-redux'
 import {Avatar, Row, Col, Typography} from 'antd'
 import DataExpander from '../../lib/ObjectExplorer'
-import {commentUser} from "../../store/modules/users";
+import {commentUser} from "../../store/modules/users"
+import {LinkToUserPage} from "./utils"
 
 const Outer = styled.div`
   position: relative;
@@ -13,19 +14,31 @@ const Outer = styled.div`
   border-top: 1px solid grey;
   border-bottom: 1px solid grey;
 `
-function UsersListItem(props) {
+const Comment = ({commentData}) => (
+  <Typography>Comment: {commentData.commentBody}</Typography>
+)
+
+function UsersListItem({user, ...props}) {
   return (
     <Outer>
-      <DataExpander objectKey={'props'}>{props}</DataExpander>
+      <DataExpander objectKey={'user'}>{user}</DataExpander>
       <Row justify={'center'} type={'flex'}>
         <Col span={3}>
-          <Avatar size={50}>{props.user.email.slice(0, 2)}</Avatar>
+          <LinkToUserPage userId={user.id}>
+            <Avatar size={50}>{user.email.slice(0, 2)}</Avatar>
+          </LinkToUserPage>
         </Col>
       </Row>
       <Row>
-        <Typography>User email: {props.user.email}</Typography>
+        <Typography>User email: {user.email}</Typography>
       </Row>
-      <button onClick={props.commentUser.bind(null, props.user.id)}>COmment me</button>
+      <Row>
+        {user.received_comments.map(comment =>
+          <Comment commentData={comment} key={comment.id}/>
+         )}
+        <Typography>User email: {user.email}</Typography>
+      </Row>
+      <button onClick={props.commentUser.bind(null, user.id)}>Comment me</button>
     </Outer>
   )
 }
