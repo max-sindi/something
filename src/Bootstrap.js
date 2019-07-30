@@ -5,6 +5,7 @@ import MyProjects from './pages/MyProjects'
 import UserProfile from './pages/UserProfile'
 import Weather from './pages/Weather'
 import Users from './pages/Users'
+import Z from './pages/Z'
 import {checkIsLogged} from './store/modules/auth'
 import {connect} from 'react-redux'
 import OnlineIndicator from './OnlineIndicator'
@@ -36,6 +37,7 @@ class Bootstrap extends Component {
               <Route exact path={'/users'} component={Users}/>
               <Route exact path={'/user/:userId'} component={UserProfile}/>
               <Route exact path={'/weather'} component={Weather}/>
+              <Route exact path={'/Z'} component={Z}/>
             </Main>
           </Router>
         </PageWrapper>

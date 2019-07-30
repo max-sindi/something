@@ -21,6 +21,11 @@ export default class Sidebar extends React.Component {
             Weather
           </Link>
         </LinkStyled>
+        <LinkStyled>
+          <Link to={`/Z`}>
+            Z
+          </Link>
+        </LinkStyled>
       </SidebarOuter>
     )
   }

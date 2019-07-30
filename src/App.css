@@ -65,3 +65,7 @@
   left: 15px;
   top: 15px;
 }
+
+.main {
+  width: calc(100% - 300px)
+}

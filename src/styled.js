@@ -4,6 +4,7 @@ import {onlineGreen, onlineRed} from './colors'
 
 export const PageWrapper = style.div`
   display: flex;
+  width: 100%;
 `
 
 export const Cover = style.div`
