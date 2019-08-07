@@ -1,4 +1,6 @@
 import React from 'react'
+import subscriber from './subscriber'
+import Zi from './Zi'
 
 const initialSelectingState = {
   updateInterval: null,
@@ -14,7 +16,7 @@ const initialMouseCoords = {
 
 export default class Z extends React.Component {
 
-  state = {...initialSelectingState}
+  state = {...initialSelectingState, currentState: null}
   mouseCoords = {...initialMouseCoords}
 
   get mouseX() {
@@ -24,11 +26,20 @@ export default class Z extends React.Component {
     return this.state.mouseX && this.state.mouseY
   }
 
+  componentDidMount() {
+    // const currentState = await subscriber.subscribe()
+    const currentState = subscriber.subscribe()
+    this.setState({currentState})
+  }
+
+
+  saveElement = () => {}
+
   startSelect = evt => {
     const {clientY} = evt
     const clientX = evt.clientX - 300 // - 300 sidebar width for now
     this.mouseCoords = {...initialMouseCoords}
-    this.setState({...initialSelectingState, startX: clientX, startY: clientY})
+    this.setState(state => ({...state, ...initialSelectingState, startX: clientX, startY: clientY}))
     this.startHuntTheValue()
   }
   startHuntTheValue = () => {
@@ -45,8 +56,9 @@ export default class Z extends React.Component {
     this.mouseCoords.Y = evt.clientY
   }
   stopSelect = () => {
-    this.setState(st => st.updateInterval && (clearInterval(st.updateInterval) || ({...st, updateInterval: null})),
-      () => window.removeEventListener('mousemove', this.mouseMoveHandler))
+    this.setState(st => st.updateInterval && (clearInterval(st.updateInterval) || ({...st, updateInterval: null})))
+    window.removeEventListener('mousemove', this.mouseMoveHandler)
+    this.saveElement();
   }
 
   get getFrameDimentions() {
@@ -71,6 +83,7 @@ export default class Z extends React.Component {
         startY:{ state.startY}, startX: {state.startX}, <br/>
         mouseY: {this.mouseY},  mouseX: {this.mouseX},
         <div style={{position: 'absolute', ...this.getFrameDimentions, background: '#ff7341f5'}}/>
+        {state.currentState && <Zi currentState={state.currentState}/>}
       </div>
     )
   }
