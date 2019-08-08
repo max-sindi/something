@@ -33,8 +33,6 @@ export default class Z extends React.Component {
   }
 
 
-  saveElement = () => {}
-
   startSelect = evt => {
     const {clientY} = evt
     const clientX = evt.clientX - 300 // - 300 sidebar width for now
@@ -58,7 +56,10 @@ export default class Z extends React.Component {
   stopSelect = () => {
     this.setState(st => st.updateInterval && (clearInterval(st.updateInterval) || ({...st, updateInterval: null})))
     window.removeEventListener('mousemove', this.mouseMoveHandler)
-    this.saveElement();
+    saveElement()
+
+
+    const saveElement = () => {}
   }
 
   get getFrameDimentions() {
