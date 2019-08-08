@@ -34,7 +34,7 @@ class Element extends Component {
   }
 
   render() {
-    console.log(this.props.indexInLevel);
+    // console.log(this.props.indexInLevel);
     const attrs = {'data-deep-level': this.deepLevel, 'data-index-in-level': this.indexInLevel}
     return <>{h('div', attrs, this.renderListOrText(this.props.fragment.children))}</>
   }
@@ -45,7 +45,8 @@ export default class Zi extends React.Component {
     const {currentState} = this.props
     return !currentState.template ? null : (
       // null
-      <>{currentState.template.map((fragment, index) => <Element indexInLevel={index} fragment={fragment}></Element>)}</>
+      <>{currentState.template.map((fragment, index) => console.log('Symbol of each fragment', Symbol(index)) ||
+        <Element key={index} indexInLevel={index} fragment={fragment}></Element>)}</>
     )
   }
 }

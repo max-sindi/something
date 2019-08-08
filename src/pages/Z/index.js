@@ -58,8 +58,10 @@ export default class Z extends React.Component {
     window.removeEventListener('mousemove', this.mouseMoveHandler)
     saveElement()
 
+    // start collect results of area selecting
+    function saveElement() {
 
-    const saveElement = () => {}
+    }
   }
 
   get getFrameDimentions() {

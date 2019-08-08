@@ -1,13 +1,13 @@
-import api from '../../apiUrls'
+// import api from '../../apiUrls'
 import {success, error} from "redux-saga-requests";
 
 
 const FETCH_CITIES = 'FETCH_CITIES'
 export const fetchCities = () => ({
   type: FETCH_CITIES,
-  request: {
-    url: api.cities,
-  }
+  // request: {
+  //   url: api.cities,
+  // }
 })
 
 const initialState = {

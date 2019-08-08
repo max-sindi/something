@@ -4,10 +4,10 @@ const CHECK_ONLINE = 'CHECK_ONLINE'
 
 export const checkOnline = () => ({
   type: CHECK_ONLINE,
-  request: {
-    url: '/services/ping',
-    method: 'get'
-  }
+  // request: {
+  //   url: '/services/ping',
+  //   method: 'get'
+  // }
 })
 
 const initialState = {

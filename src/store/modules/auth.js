@@ -1,14 +1,15 @@
 const CHECK_IS_LOGGED = 'CHECK_IS_LOGGED'
 
 export const checkIsLogged = () => ({
+  // type: '',
   type: CHECK_IS_LOGGED,
-  request: {
-    url: 'auth/check-token',
-    method: 'get',
-    headers: {
-      'authorization': localStorage.getItem('token')
-    }
-  }
+  // request: {
+  //   url: 'auth/check-token',
+  //   method: 'get',
+  //   headers: {
+  //     'authorization': localStorage.getItem('token')
+  //   }
+  // }
 })
 
 const initialState = {
