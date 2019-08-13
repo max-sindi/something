@@ -42,12 +42,12 @@ export default class Z extends React.Component {
   }
 
   startHuntTheValue = () => {
-    const timer = setInterval(() => this.setState({
+    const updateInterval = setInterval(() => this.setState({
       mouseX: this.mouseCoords.X,
       mouseY: this.mouseCoords.Y
     }),30)
 
-    this.setState({updateInterval: timer})
+    this.setState({updateInterval})
     window.addEventListener('mousemove', this.mouseMoveHandler)
   }
 
