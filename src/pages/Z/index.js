@@ -40,6 +40,7 @@ export default class Z extends React.Component {
     this.setState(state => ({...state, ...initialSelectingState, startX: clientX, startY: clientY}))
     this.startHuntTheValue()
   }
+
   startHuntTheValue = () => {
     const timer = setInterval(() => this.setState({
       mouseX: this.mouseCoords.X,
@@ -49,7 +50,8 @@ export default class Z extends React.Component {
     this.setState({updateInterval: timer})
     window.addEventListener('mousemove', this.mouseMoveHandler)
   }
-  mouseMoveHandler = evt => {
+
+   mouseMoveHandler = evt => {
     this.mouseCoords.X = evt.clientX
     this.mouseCoords.Y = evt.clientY
   }
@@ -60,6 +62,8 @@ export default class Z extends React.Component {
 
     // start collect results of area selecting
     function saveElement() {
+      // architecture for fun
+      // *throw a hook to the bottom of nesting*
 
     }
   }
@@ -71,6 +75,7 @@ export default class Z extends React.Component {
     const isWidthPositive = XDiff >= 0
     const isHeightPositive = YDiff >= 0
     // console.log(Math.abs(XDiff), Math.abs(YDiff))
+
     return {
       top: isHeightPositive? state.startY : this.mouseY,
       left: isWidthPositive ? state.startX : this.mouseX,
@@ -86,7 +91,7 @@ export default class Z extends React.Component {
         startY:{ state.startY}, startX: {state.startX}, <br/>
         mouseY: {this.mouseY},  mouseX: {this.mouseX},
         <div style={{position: 'absolute', ...this.getFrameDimentions, background: '#ff7341f5'}}/>
-        {state.currentState && <Zi currentState={state.currentState}/>}
+        {state.currentState && <Zi currentState={state.currentState} stateToBottomHook={()=>{}/* TODO: */}/>}
       </div>
     )
   }

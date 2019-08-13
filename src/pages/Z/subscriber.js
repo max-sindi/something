@@ -3,10 +3,13 @@ export default {
     return {
       template: [{
         tag: 'div',
-        children: [{
-          tag: 'div',
-          children: "it's end"
-        }]
+        children: [
+          'inline text example',
+          {
+            tag: 'div',
+            children: "it's end"
+          },
+        ]
       }]
     }
   }
