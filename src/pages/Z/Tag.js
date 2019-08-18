@@ -5,7 +5,7 @@ var hyperscript = require('react-hyperscript')
 
 
 
-class Tag extends Component {
+export default class Tag extends Component {
 
   static propTypes = {
     indexInLevel: PropTypes.number,

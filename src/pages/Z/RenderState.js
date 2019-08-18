@@ -6,9 +6,7 @@ function recursevelyDoSomething(start) {
 
 }
 
-// export default const
-
-export default class Zi extends React.Component {
+export default class RenderState extends React.Component {
   render() {
     const template = _.get(this.props.currentState, 'template')
     return !template ? null : (
@@ -18,8 +16,8 @@ export default class Zi extends React.Component {
             key={index}
             indexInLevel={index}
             fragment={fragment}
-          />)
-        }
+          />
+        )}
       </>
     )
   }
