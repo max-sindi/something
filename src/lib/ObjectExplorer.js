@@ -18,7 +18,7 @@ const MostOuter = styled.div.attrs(pr => ({
   }
 `;
 
-const ExtendingButton = styled.button`
+export const ExtendingButton = styled.button`
   padding: 0px 10px;
   margin-left: 10px;
   background-color: #eeeeeeee;

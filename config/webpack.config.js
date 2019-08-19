@@ -343,6 +343,10 @@ module.exports = function(webpackEnv) {
                 ),
                 
                 plugins: [
+
+
+                  "babel-plugin-transform-decorators-legacy",
+                  "babel-plugin-transform-decorators",
                   [
                     require.resolve('babel-plugin-named-asset-import'),
                     {
