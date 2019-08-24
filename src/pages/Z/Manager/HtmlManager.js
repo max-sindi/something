@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import _ from "lodash";
 import {ExtendingButton} from '../../../lib/ObjectExplorer'
+import {generateColor} from '../../../utils'
 
 
 class EachTagManager extends React.Component {
@@ -21,18 +22,23 @@ class EachTagManager extends React.Component {
 
 
   render() {
+    const {deepLevel, indexInLevel} = this.props
     const {isVisible} = this.state
     const fragment = this.props.fragment
     return (
-      <div style={{paddingLeft: 20}}>
+      <div style={{background: generateColor(deepLevel, indexInLevel)}}>
         <div>
           <ExtendingButton onClick={this.toggleVisibility}>{isVisible ? '-' : '+'}</ExtendingButton>
         </div>
         <div>Tag: {fragment.tag}</div>
         {isVisible &&
-          <div>children: {fragment.children.map((child, index) => !_.isObject(child) ? child : (
-            <EachTagManager fragment={child} key={index} deepLevel={this.props.deepLevel + 1} indexInLevel={index}/>
-          ))}</div>
+          <div>children: {fragment.children.map((child, index) =>
+            <div key={index} style={{paddingLeft: 15}}>
+              {!_.isObject(child) ? child : (
+                <EachTagManager fragment={child} key={index} deepLevel={deepLevel + 1} indexInLevel={index}/>
+              )}
+            </div>
+          )}</div>
         }
       </div>
     )
