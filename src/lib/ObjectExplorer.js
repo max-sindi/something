@@ -1,6 +1,7 @@
 import React from 'react'
 import {isNil} from 'lodash'
 import styled from 'styled-components'
+import {Button} from "antd"
 
 const MostOuter = styled.div.attrs(pr => ({
   tabIndex: 0
@@ -28,6 +29,9 @@ export const ExtendingButton = styled.button`
   font-size: 20px;
   font-weight: 900;
 `;
+
+export const ButtonExtendComponent = ExtendingButton
+export const ButtonAddNewChild = styled(Button)``
 
 const ValueRow = styled.div`
   margin-left: 10px;

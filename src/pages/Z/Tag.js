@@ -20,7 +20,8 @@ export default class Tag extends Component {
   get attrs() {
     return {
       'data-deep-level': this.props.deepLevel + 1,
-      'data-index-in-level': this.props.indexInLevel
+      'data-index-in-level': this.props.indexInLevel,
+      'className': this.props.fragment.className
     }
   }
   get fragment() {
@@ -29,8 +30,8 @@ export default class Tag extends Component {
 
   recursiveRenderChildren() {
     const {children} = this.props.fragment
-    // if children are - return either string or mapped array
-    return children && (!Array.isArray(children) ? children : children.map((child, index) => {
+
+    return children && children.map((child, index) => {
       return !_.isObject(child) ? (child || '') : (
           <Tag
               fragment={child}
@@ -38,7 +39,7 @@ export default class Tag extends Component {
               indexInLevel={index}
           />
       )
-    }))
+    })
   }
 
   render() {

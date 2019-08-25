@@ -1,13 +1,14 @@
-import React from "react";
-import PropTypes from "prop-types";
-import _ from "lodash";
-import {ExtendingButton} from '../../../lib/ObjectExplorer'
-import {generateColor} from '../../../utils'
+import React from "react"
+import PropTypes from "prop-types"
+import _ from "lodash"
+import {ButtonExtendComponent, ButtonAddNewChild} from '../../../lib/ObjectExplorer'
+import {TagWrapper} from '../styled'
+import subscriber from '../subscriber'
 
 
 class EachTagManager extends React.Component {
   state = {
-    isVisible: false
+    isOpened: false
   }
   static propTypes = {
     indexInLevel: PropTypes.number,
@@ -18,29 +19,51 @@ class EachTagManager extends React.Component {
     deepLevel: 0
   }
 
-  toggleVisibility = () => this.setState(st => ({isVisible: !st.isVisible}))
+  get breadcrumbsInTree() {
+    return this.props.breadcrumbs
+  }
 
+  toggleVisibility = () => this.setState(st => ({ isOpened: !st.isOpened }))
+
+  async addNewChild() {
+    const template = await subscriber.template
+    // console.log(template)
+  }
 
   render() {
     const {deepLevel, indexInLevel} = this.props
-    const {isVisible} = this.state
+    const {isOpened} = this.state
     const fragment = this.props.fragment
     return (
-      <div style={{background: generateColor(deepLevel, indexInLevel)}}>
+      <TagWrapper isOpened={isOpened} deepLevel={deepLevel} indexInLevel={indexInLevel}>
+        {/* display tag name */}
+        <div>{fragment.tag}</div>
         <div>
-          <ExtendingButton onClick={this.toggleVisibility}>{isVisible ? '-' : '+'}</ExtendingButton>
+          <ButtonExtendComponent onClick={this.toggleVisibility}>{isOpened ? '-' : '+'}</ButtonExtendComponent>
         </div>
-        <div>Tag: {fragment.tag}</div>
-        {isVisible &&
-          <div>children: {fragment.children.map((child, index) =>
-            <div key={index} style={{paddingLeft: 15}}>
-              {!_.isObject(child) ? child : (
-                <EachTagManager fragment={child} key={index} deepLevel={deepLevel + 1} indexInLevel={index}/>
-              )}
-            </div>
-          )}</div>
+
+        {isOpened &&
+
+        /* display children and ...*/
+        <div style={{paddingLeft: 15}}>
+          <div>
+            {fragment.children.map((child, index) =>
+              <div key={index} style={{marginTop: 4}}>
+                {!_.isObject(child) ? child : (
+                  <EachTagManager fragment={child} key={index} deepLevel={deepLevel + 1} indexInLevel={index}/>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* ... and the button for adding new child */}
+          <div style={{marginTop: 8}}>
+            <ButtonAddNewChild onClick={this.addNewChild}>Add child</ButtonAddNewChild>
+          </div>
+        </div>
+
         }
-      </div>
+      </TagWrapper>
     )
   }
 }
