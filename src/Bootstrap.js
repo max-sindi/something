@@ -13,8 +13,10 @@ import Sidebar from './components/sidebar/Sidebar'
 import Main from './components/Main'
 import {fetchCities} from './store/modules/cities'
 import ObjectExplorer from './lib/ObjectExplorer'
+import Scene from './pages/Scene'
 
 import {PageWrapper} from './styled'
+import './_styles.css'
 
 class Bootstrap extends Component {
 
@@ -38,6 +40,7 @@ class Bootstrap extends Component {
               <Route exact path={'/user/:userId'} component={UserProfile}/>
               <Route exact path={'/weather'} component={Weather}/>
               <Route exact path={'/Z'} component={Z}/>
+              <Route exact path={'/babylon'} component={Scene}/>
             </Main>
           </Router>
         </PageWrapper>

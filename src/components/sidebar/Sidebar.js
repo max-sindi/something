@@ -26,6 +26,11 @@ export default class Sidebar extends React.Component {
             Z
           </Link>
         </LinkStyled>
+        <LinkStyled>
+          <Link to={`/babylon`}>
+            Babylon
+          </Link>
+        </LinkStyled>
       </SidebarOuter>
     )
   }

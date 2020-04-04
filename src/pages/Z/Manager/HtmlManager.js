@@ -79,6 +79,7 @@ export default class HtmlManager extends React.Component {
 
     return (
       <div className={"html-manager"}>
+        <h4 className={`mb-20`}>HTML manager </h4>
         {template.map((fragment, index) =>
           <EachTagManager fragment={fragment} key={index} indexInLevel={index}/>
         )}

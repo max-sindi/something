@@ -1,7 +1,15 @@
 import React from 'react'
-import subscriber from './subscriber'
+import Subscriber from './subscriber'
 import RenderState from './RenderState'
 import Manager from './Manager/Manager'
+import {connect} from 'react-redux'
+
+
+
+const connectArgs = [
+  null,
+  null
+]
 
 const initialSelectingState = {
   updateInterval: null,
@@ -15,9 +23,9 @@ const initialMouseCoords = {
   Y:null
 }
 
-export default class Z extends React.Component {
+class Z extends React.Component {
 
-  state = {...initialSelectingState, currentState: null}
+  state = {...initialSelectingState, currentState: null, subscriber: {}}
   mouseCoords = {...initialMouseCoords}
 
   get mouseX() {
@@ -27,10 +35,29 @@ export default class Z extends React.Component {
     return this.state.mouseX && this.state.mouseY
   }
 
-  componentDidMount() {
+  componentDidMount = () => {
     // const currentState = await subscriber.subscribe()
-    const currentState = subscriber.subscribe()
-    this.setState({currentState})
+    const {dispatch} = this.props
+    const api = {
+      update: async data => {
+        const res = dispatch({
+          type: 'UPDATE_STATE', request: {url: '/z', method: 'post', data}
+        })
+
+        res.then(res => this.setState(cur => ({...cur, currentState: res.data})))
+
+        return res
+      },
+    };
+    (async() => {
+      const subscriber = new Subscriber({api})
+      const currentState = await subscriber.subscribe()
+      const updateResult = await subscriber.update(currentState)
+      console.log('updateResult', updateResult.response)
+      this.setState({currentState, subscriber})
+    //
+    })()
+
   }
   //
   //
@@ -90,9 +117,15 @@ export default class Z extends React.Component {
         {/*startY:{ state.startY}, startX: {state.startX}, <br/>*/}
         {/*mouseY: {this.mouseY},  mouseX: {this.mouseX},*/}
         {/*<div style={{position: 'absolute', ...this.getFrameDimentions, background: '#ff7341f5'}}/>*/}
+
+        {/* render current markup */}
         {state.currentState && <RenderState currentState={state.currentState}/>}
-        {state.currentState && <Manager save={subscriber.save} currentState={state.currentState}/>}
+
+        {/* render tools */}
+        {state.currentState && <Manager save={this.state.subscriber.update} currentState={state.currentState}/>}
       </div>
     )
   }
 }
+
+export default connect(...connectArgs)(Z)

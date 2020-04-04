@@ -6,7 +6,7 @@ function recursevelyDoSomething(start) {
 
 }
 
-export default class RenderState extends React.Component {
+export default class RenderMarkup extends React.Component {
   render() {
     const template = _.get(this.props.currentState, 'template')
     return !template ? null : (

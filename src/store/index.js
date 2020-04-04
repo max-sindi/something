@@ -21,7 +21,7 @@ const logger = createLogger({ collapsed: true})
 const store = createStore(
     reducers,
     compose(
-        applyMiddleware(thunk, requestsPromiseMiddleware(), saga, logger),
+        applyMiddleware(thunk, requestsPromiseMiddleware({ auto: true}), saga, logger),
         // offline(offlineConfig),
         window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
     )
