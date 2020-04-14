@@ -5,31 +5,26 @@ export default class Z {
     this.api = api
   }
 
-  subscribe = () => {
-    return {
-      template: this.template,
-      css: [{
-        name: 'global',
-      }]
-    }
-  };
+  getCurrentState = () => {
+    return this.api.update
+  }
 
   update = (state) => this.api.update(state)
 
-  get template() {
-      return [{
-        tag: 'div',
-        className: 'first-child',
-        children: [
-          'inline text example',
-          {
-            tag: 'div',
-            children: ["it's end"]
-          },
-        ]
-      }];
-    }
-    // return axios.get('http://localhost:8000/api/z/template').then(res => console.log(res))
+  // get template() {
+  //     return [{
+  //       tag: 'div',
+  //       className: 'first-child',
+  //       children: [
+  //         'inline text example',
+  //         {
+  //           tag: 'div',
+  //           children: ["it's end"]
+  //         },
+  //       ]
+  //     }];
+  //   }
+  //   // return axios.get('http://localhost:8000/api/z/template').then(res => console.log(res))
   // }
   //   return [{
   //     tag: 'div',

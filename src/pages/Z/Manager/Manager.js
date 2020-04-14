@@ -11,8 +11,8 @@ export default class StateTreeManager extends React.Component {
   render() {
     return (
       <div style={{background: '#32D4CB', padding: 20}}>
-        <AppManager currentState={this.props.currentState}/>
-        <HtmlManager currentState={this.props.currentState}/>
+        <AppManager currentState={this.props.currentState} {...this.props} />
+        <HtmlManager currentState={this.props.currentState} {...this.props} />
       </div>
     )
   }

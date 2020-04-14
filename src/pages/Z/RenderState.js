@@ -11,13 +11,13 @@ export default class RenderMarkup extends React.Component {
     const template = _.get(this.props.currentState, 'template')
     return !template ? null : (
       <>
-        {template.map((fragment, index) =>
+        {/*{template.map((fragment, index) =>*/}
           <Tag
-            key={index}
-            indexInLevel={index}
-            fragment={fragment}
+            key={0}
+            indexInLevel={0}
+            fragment={template}
           />
-        )}
+        {/*)}*/}
       </>
     )
   }

@@ -35,29 +35,49 @@ class Z extends React.Component {
     return this.state.mouseX && this.state.mouseY
   }
 
+
+
+  api = {
+    update: async data => {
+      const res = this.props.dispatch({
+        type: 'UPDATE_STATE', request: {url: '/z', method: 'post', data}
+      })
+
+      res.then(res => this.setState(cur => ({...cur, currentState: res.data})))
+
+      return res
+    },
+
+    getCurrentState: (data) => {
+      return this.props.dispatch({
+        type: 'GET_CURRENT_STATE', request: {url: '/z'}
+      })
+    }
+  }
+
+
+
   componentDidMount = () => {
     // const currentState = await subscriber.subscribe()
     const {dispatch} = this.props
-    const api = {
-      update: async data => {
-        const res = dispatch({
-          type: 'UPDATE_STATE', request: {url: '/z', method: 'post', data}
-        })
-
-        res.then(res => this.setState(cur => ({...cur, currentState: res.data})))
-
-        return res
-      },
-    };
+    const api = this.api;
     (async() => {
-      const subscriber = new Subscriber({api})
-      const currentState = await subscriber.subscribe()
-      const updateResult = await subscriber.update(currentState)
-      console.log('updateResult', updateResult.response)
-      this.setState({currentState, subscriber})
+      // const subscriber = new Subscriber({api})
+      const {data: currentState} = await api.getCurrentState()
+      // const updateResult = await api.update(currentState)
+      console.log('currentState', currentState)
+      this.setState({currentState})
     //
     })()
 
+  }
+
+  saveState = () => {
+    this.api.update(this.state.currentState)
+  }
+
+  updateState = (newState) => {
+    this.setState(cur => ({...cur, currentState: newState}))
   }
   //
   //
@@ -122,7 +142,11 @@ class Z extends React.Component {
         {state.currentState && <RenderState currentState={state.currentState}/>}
 
         {/* render tools */}
-        {state.currentState && <Manager save={this.state.subscriber.update} currentState={state.currentState}/>}
+        {state.currentState && <Manager save={this.updateState} currentState={state.currentState}/>}
+
+        <button onClick={this.saveState}>
+          Save
+        </button>
       </div>
     )
   }
