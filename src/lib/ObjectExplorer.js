@@ -28,6 +28,7 @@ export const ExtendingButton = styled.button`
   border: 0;
   font-size: 20px;
   font-weight: 900;
+  cursor: pointer;
 `;
 
 export const ButtonExtendComponent = ExtendingButton

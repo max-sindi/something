@@ -43,10 +43,15 @@ export default class Tag extends Component {
   }
 
   render() {
-    return hyperscript(
-        this.fragment.tag,
-        this.attrs,
-        this.recursiveRenderChildren()
-    )
+    return <i>
+      {
+        hyperscript(
+          this.fragment.tag,
+          this.attrs,
+          this.recursiveRenderChildren()
+        )
+      }
+
+      </i>
   }
 }

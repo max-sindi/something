@@ -29,15 +29,24 @@ const classNames = [
   { className: "d-none",       fast: "display: none",      media: true},
   { className: "d-block",      fast: "display: block",    media: true},
   { className: "d-flex",      fast: "display: flex",    media: true},
+  { className: "inline-flex",      fast: "display: inline-flex",    media: true},
+  { className: "align-center",      fast: "align-items: center",    media: true},
+
+   /* positions */
+  {className: 'fixed', fast: 'position: fixed'},
   { className: "flex",        fast: "display: flex",      media: true},
   { className: "flex-wrap",        fast: "flex-wrap: wrap",      media: true, after: false, before: false, percent: false, minus: false},
   { className: "text-right",  fast: "text-align: right" },
+  { className: "flex-center",  fast: "justify-content: center; align-items: center" },
   { className: "text-left",   fast: "text-align: left" },
   { className: "text-center", fast: "text-align: center" },
+  { className: 'grow', rule: 'flex-grow', eachValues: 5 },
+  { className: 'justify-between', fast: 'justify-content: space-between' },
   { className: "pre-wrap",    fast: "white-space: pre-wrap" },
   { className: "text-wrap",    fast: "white-space: wrap", media: true },
   { className: "text-no-wrap",    fast: "white-space: nowrap", media: true },
   { className: "bold",        fast: "font-weight: 700" },
+  { className: "pointer",        fast: "cursor: pointer" },
   { className: "fw-bold",     fast: "font-weight: 700" },
   { className: "ls-027",      fast: "letter-spacing: 0.27px" },
   { className: "ls-05",       fast: "letter-spacing: 0.54px" },
@@ -55,6 +64,9 @@ const classNames = [
   { className: "scale-75-p", fast: "transform: scale(0.75)", media: true },
   { className: "t-a", fast: "top: auto" },
   { className: "l-a", fast: "left: auto", media: true },
+
+  /* special */
+  { className: 'container', fast: 'max-width: 1200px; margin-left: auto; margin-right: auto; padding-left: 30px; padding-right: 30px'}
 ];
 
 const mediaConfig = [
@@ -74,18 +86,26 @@ let mediaResult = {
   sm: ``,
 }
 
+const styleNames = []
+
 classNames.forEach(({ className, rule, fast, media = true, each5Values = false, eachValues = false, px = false, minus = false, percent = false, value, after = true, before = true }) => {
   let cls = className
 
 
-  const populateResultWithStatement = (({ cls, fast, value, minus = false, measure = '' }) => result += '\n' +
-    `.${cls}{${fast ? fast : `${rule}: ${minus ? '-' : ''}${value}${measure}`}}`
+  const populateResultWithStatement = (({ cls, fast, value, minus = false, measure = '' }) => {
+    styleNames.push(cls)
+    result += '\n' +
+        `.${cls}{${fast ? fast : `${rule}: ${minus ? '-' : ''}${value}${measure}`}}`
+    }
   );
 
    // @media (max-width: ${media.p}px) {
   // media fast? need to refactor
-  const populateMediaResultWithStatement = (({ cls, value, media, minus = false, measure = '' }) =>  mediaResult[media.name] += '\n' +
-    `.${cls}{${fast ? fast : `${rule}: ${minus ? '-' : ''}${value}${measure}`}}`
+  const populateMediaResultWithStatement = (({ cls, value, media, minus = false, measure = '' }) =>  {
+    styleNames.push(cls)
+    mediaResult[media.name] += '\n' +
+        `.${cls}{${fast ? fast : `${rule}: ${minus ? '-' : ''}${value}${measure}`}}`
+    }
   );
 
   if(fast) {
@@ -160,8 +180,14 @@ classNames.forEach(({ className, rule, fast, media = true, each5Values = false, 
 
 const media = mediaConfig.map(m => `\n @media (max-width:${m.p}px){${ mediaResult[m.name] }}`).join('\n')
 
-
+// console.log(321,classNames)
 fs.writeFileSync(
   './_styles.css',
   (result + media) // persist true order: non-media then media
 );
+
+fs.writeFileSync('./_styles.json', JSON.stringify({classNames: styleNames}))
+// console.log(styleNames)
+
+
+// module.exports.styleNames = styleNames

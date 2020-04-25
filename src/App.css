@@ -74,3 +74,8 @@
 
   background-color: #3c40c622;
 }
+
+input {
+  padding: 5px 5px 5px 5px;
+  border: 1px solid #ccc
+}

@@ -144,7 +144,7 @@ class Z extends React.Component {
         {/* render tools */}
         {state.currentState && <Manager save={this.updateState} currentState={state.currentState}/>}
 
-        <button onClick={this.saveState}>
+        <button onClick={this.saveState} className={`fixed t-60 r-40`}>
           Save
         </button>
       </div>
