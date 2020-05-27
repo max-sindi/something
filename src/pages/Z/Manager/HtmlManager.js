@@ -13,6 +13,8 @@ import {AiFillCodeSandboxSquare} from 'react-icons/ai'
 import {TiArrowForward} from 'react-icons/ti'
 import {AiOutlineCodeSandbox} from 'react-icons/ai'
 import {RiEditLine, RiPaintBrushLine} from 'react-icons/ri'
+import {MdArrowDownward, MdArrowUpward} from 'react-icons/md'
+import ClassNamesSelector from '../ClassNamesSelector'
 
 // import subscriber from '../subscriber'
 // import ReactSelect from 'react-select'
@@ -96,7 +98,7 @@ class EachTagManager extends React.Component {
       elem = clonedTemplate
     }
 
-    elem.children.push(this.createDiv())
+    elem.children.push(this.createDiv({children: ['']}))
     // console.log('clonedTemplate after mutation', clonedTemplate)
     this.save(clonedTemplate)
 
@@ -119,7 +121,7 @@ class EachTagManager extends React.Component {
 
 
 
-  deleteElement = () => this.transform(() => null)
+  deleteElement = () => this.transformParent(parent => ({...parent, children: parent.children.filter((i, index) => index !== this.props.indexInLevel)}))
 
 
 
@@ -129,32 +131,48 @@ class EachTagManager extends React.Component {
   changeText = (evt) => this.transform(evt.target.value)
   changeClassName = evt => this.transform((val) => ({...val, className: evt.target.value}))
   wrapWithDiv = () => this.transform(val => ({...this.createDiv(), children: [...this.createDiv().children, val]}))
+  moveUpward = () => this.swapElements(this.props.indexInLevel - 1, this.props.indexInLevel)
+  moveDownward = () => this.swapElements(this.props.indexInLevel, this.props.indexInLevel + 1 )
+  changeClassNamesList = className => this.transform(val => Object.assign(val, {className}))
+
+  swapElements = (first, second) => this.transformParent(parent => {
+    const {children} = parent
+    const firstElem = children[first]
+    const secondElem = children[second]
+    children[first] = secondElem
+    children[second] = firstElem
+    return {...parent, children}
+  })
 
 
-  createDiv = () => ({
-    children: [],
+  createDiv = ({children = []} = {}) => ({
+    children,
     tag: 'div',
     className: 'newly added'
   })
 
   transform = (transformer, xpath = this.props.xpath) => {
+    // @todo continue
     const clone = this.createClone()
+    const firstTwoArgs = [xpath ? clone : {value: clone}, xpath || 'value']
 
     if(_.isFunction(transformer)) {
-      _.updateWith(clone, xpath, transformer)
+      _.updateWith(...firstTwoArgs, transformer)
     } else {
-      _.updateWith(clone, xpath, () => transformer)
+      _.updateWith(...firstTwoArgs, () => transformer)
     }
 
     this.save(clone)
   }
+
+  transformParent = (transformer) => this.transform(transformer, this.props.parentXpath)
 
 
 
   recursiveRenderChildren = () => (
     this.state.isOpened
     &&
-    this.props.fragment.children.map((child, index) =>
+    this.props.fragment.children.map((child, index, arr) =>
       <div key={index} style={{marginTop: 4}}>
         {/*{!_.isObject(child) ? child : (*/}
         <EachTagManager
@@ -165,6 +183,7 @@ class EachTagManager extends React.Component {
           deepLevel={this.props.deepLevel + 1}
           indexInLevel={index}
           parentXpath={this.props.xpath}
+          lastInLevel={index === arr.length - 1}
           xpath={`${this.props.xpath}${this.props.xpath ? '.' : ''}children[${index}]`}
         />
         {/*)}*/}
@@ -174,8 +193,8 @@ class EachTagManager extends React.Component {
 
 
   render() {
-    console.log('this.props.currentState' , this.props.currentState)
-    const {deepLevel, indexInLevel, first} = this.props
+    // console.log('this.props.currentState' , this.props.currentState)
+    const {deepLevel, indexInLevel, first, lastInLevel} = this.props
     const {isOpened} = this.state
     const fragment = this.props.fragment
     const isObject = _.isObject(fragment)
@@ -187,18 +206,13 @@ class EachTagManager extends React.Component {
 
     return (
       <TagWrapper isOpened={isOpened} deepLevel={deepLevel} indexInLevel={indexInLevel} {...this.props}>
-        {/* display tag name */}
 
-        {/*<div>deepLevel: {deepLevel}</div>*/}
-        {/*<div>xpathttttttttttt: {this.props.xpath}</div>*/}
-        {/*<div>parentXpath: {this.props.parentXpath}</div>*/}
         <div className={`flex align-center`}>
           {isOpened
             ? <aiIcons.AiOutlineMinusSquare onClick={this.toggleVisibility} size={30}></aiIcons.AiOutlineMinusSquare>
             : <aiIcons.AiOutlinePlusSquare onClick={this.toggleVisibility} size={30}></aiIcons.AiOutlinePlusSquare>
           }
           {!first && isObject && <span className={`pl-5`}>tag: {fragment.tag}</span>}
-          {/*<ButtonExtendComponent onClick={this.toggleVisibility}>{isOpened ? '-' : '+'}</ButtonExtendComponent>*/}
         </div>
 
         {first && isObject && this.recursiveRenderChildren()}
@@ -207,22 +221,19 @@ class EachTagManager extends React.Component {
         {/* object elements */}
         {!first && isObject && (
           <>
-            {/*<gameIcons.GoTextSize size={20}></gameIcons.GoTextSize>*/}
-            {/*<div className={'pt-10 '}><span className="pointer" ></span></div>*/}
             <div className={`flex align-center mt-10 pointer`} onClick={this.makeItText} title={'Make it text'}>
-              <AiOutlineCodeSandbox size={26}></AiOutlineCodeSandbox>
-              <FaAngleLeft size={22}></FaAngleLeft>
-              <FaEquals size={17} className={'ml-5-minus'} style={{marginTop: 2}}></FaEquals>
+              <AiOutlineCodeSandbox size={26} style={{marginRight: 4}}></AiOutlineCodeSandbox>
+              <FaEquals size={17} style={{marginTop: 2}}></FaEquals>
+              <FaAngleRight size={22} className={'mr-5-minus'} style={{marginLeft: -4}}></FaAngleRight>
               <gameIcons.GoTextSize size={28} style={{marginTop: -2, marginLeft: 6}}></gameIcons.GoTextSize>
             </div>
-            <label className={'flex align-center pb-10 pt-10'} >
-              <RiPaintBrushLine size={30} className={'mr-5'}></RiPaintBrushLine>
-              <input type="text" value={fragment.className} onChange={this.changeClassName} className={`grow-1`} style={{marginTop: 2}}/>
-            </label>
+            {/*<label className={'flex align-center pb-10 pt-10'} >*/}
+              {/*<RiPaintBrushLine size={30} className={'mr-5'}></RiPaintBrushLine>*/}
+              {/*<input type="text" value={fragment.className} onChange={this.changeClassName} className={`grow-1`} style={{marginTop: 2}}/>*/}
+            {/*</label>*/}
 
-
-            {this.recursiveRenderChildren()}
             <AiOutlineFileAdd size={30} onClick={this.addNewChild} title={'Add child +'} />
+
           </>
         )}
 
@@ -233,90 +244,43 @@ class EachTagManager extends React.Component {
         {/* text elements */}
         {!first && !isObject && (
           <>
-
-
-            {/*<div className={'pt-10 '}><span className="pointer" </span></div>*/}
             <div className="inline-flex flex-center mt-10 pointer" title={'Make it div'} onClick={this.makeItDiv}>
               <gameIcons.GoTextSize size={28} style={{marginTop: -2, marginRight: 3}}></gameIcons.GoTextSize>
               <FaEquals size={17} className={'mr-5-minus'} style={{marginTop: 2}}></FaEquals>
               <FaAngleRight size={22}></FaAngleRight>
               <AiOutlineCodeSandbox size={26}></AiOutlineCodeSandbox>
-              {/*<TiArrowForward  title={''} size={20}></TiArrowForward>*/}
             </div>
 
             <label className={`flex align-center pb-10 pt-10 `} >
               <RiEditLine size={25} className={'cursor-default mr-10'}/>
-              <input type="text" value={fragment} onChange={this.changeText} />
+              <input type="text" value={fragment} onChange={this.changeText} className={`grow-1`}/>
             </label>
 
           </>
         )}
 
 
+        {/* general actions */}
         {!first && (
           <>
             <githubIcons.GiTrashCan size={'40px'} onClick={this.deleteElement} title={'Delete'}>x</githubIcons.GiTrashCan>
             <FaRegShareSquare className="ml-10" onClick={this.wrapWithDiv} title={'Wrap with div'} size={25} />
-            {/*<div><span  ></span></div>*/}
+            {indexInLevel > 0 && (
+              <MdArrowUpward onClick={this.moveUpward} title={`Move Upward`}></MdArrowUpward>
+            )}
+            {lastInLevel === false && (
+              <MdArrowDownward onClick={this.moveDownward} title={`Move Downward`}></MdArrowDownward>
+            )}
           </>
         )}
 
 
-
-
-            {/*<>*/}
-              {/*{_.isObject(fragment)*/}
-                {/*? (*/}
-                  {/*<>*/}
-
-                    {/*{!first && (<>*/}
-                        {/*Classname: <input type="text" value={fragment.className} onChange={this.changeClassName}/>*/}
-                      {/*</>)*/}
-                    {/*}*/}
-                    {/*{isOpened && (*/}
-                      {/*<div style={{paddingLeft: 15}}>*/}
-                        {/*<div style={{border: '1px solid #234589'}}>*/}
-                          {/*{fragment.children.map((child, index) =>*/}
-                            {/*<div key={index} style={{marginTop: 4}}>*/}
-                              {/*/!*{!_.isObject(child) ? child : (*!/*/}
-                              {/*<EachTagManager*/}
-                                {/*{...this.props}*/}
-                                {/*fragment={child}*/}
-                                {/*key={index}*/}
-                                {/*deepLevel={deepLevel + 1}*/}
-                                {/*indexInLevel={index}*/}
-                                {/*parentXpath={this.props.xpath}*/}
-                                {/*xpath={`${this.props.xpath}${this.props.xpath ? '.' : ''}children[${index}]`}*/}
-                              {/*/>*/}
-                              {/*/!*)}*!/*/}
-                            {/*</div>*/}
-                          {/*)}*/}
-                        {/*</div>*/}
-
-                        {/* ... and the button for adding new child */}
-                          {/*<div style={{marginTop: 8, marginLeft: 10}}>*/}
-                            {/*<ButtonAddNewChild onClick={this.addNewChild}>Add child</ButtonAddNewChild>*/}
-                            {/*{!first && <ButtonAddNewChild onClick={this.makeItText}>Make it text</ButtonAddNewChild>}*/}
-                          {/*</div>*/}
-                      {/*</div>*/}
-                    {/*)}*/}
-                  {/*</>*/}
-                {/*)*/}
-                {/*:*/}
-                  {/*<>*/}
-                    {/*<input type="text" value={fragment} onChange={this.changeText}/>*/}
-                    {/*<ButtonAddNewChild onClick={this.makeItDiv}>Make it div</ButtonAddNewChild>*/}
-                  {/*</>*/}
-
-              {/*}*/}
-
-
-
-
-              {/*{!first && (<div className="ml-a">*/}
-                {/**/}
-              {/*</div>)}*/}
-            {/*</>*/}
+        {!first && isObject && (
+          <div className={`pt-5 pb-5`}>
+            <ClassNamesSelector onChange={this.changeClassNamesList} value={fragment.className}></ClassNamesSelector>
+            {this.recursiveRenderChildren()}
+          </div>
+        )}
 
       </TagWrapper>
     )

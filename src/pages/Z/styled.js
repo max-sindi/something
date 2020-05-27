@@ -8,14 +8,14 @@ import React from 'react'
 
 
 export const TagWrapperStyled = styled.div`
-  background: ${({ deepLevel, indexInLevel, fragment }) => console.log(1, fragment) || _.isObject(fragment) ? generateColor(deepLevel, indexInLevel) : '#fff'}; 
+  background: ${({ deepLevel, indexInLevel, fragment }) => _.isObject(fragment) ? generateColor(deepLevel, indexInLevel) : '#fff'}; 
   // ${({ isOpened }) => isOpened && 'border: 1px solid #234589'};
   box-shadow: 0 0 10px 0 #234589;
   // border: 1px solid #234589;
   padding: 7px;
   padding-left: ${({deepLevel}) => `${deepLevel * 10}px`};
   padding-bottom: 20px;
-  min-height: 215px;
+  min-height: 200px;
 `
 
 

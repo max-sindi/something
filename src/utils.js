@@ -8,7 +8,7 @@ export const generateColor = (a = 1, b = 1, c = 1) => {
       .map((val, i) =>
       // abs for 2x range increasing
         Math.abs(
-          val - (args[i] * 10))
+          val - (args[i] * 20))
         )
       .join(', ')
   }

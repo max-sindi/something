@@ -38,7 +38,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "create:styles": "cd src && node ./styles.js"
+    "create:styles": "cd src && node ./styles.js",
+    "redis": "cd ~/something-server/ && npm run redis",
+    "server": "cd ~/something-server/ && npm start"
   },
   "eslintConfig": {
     "extends": "react-app"
