@@ -4,11 +4,11 @@ import Media from "./Media"
 
 
 export default class CssUnitClassBranch {
-    public readonly className: string
     private readonly property: string
-    public readonly classes: CssClass[]
     private readonly media: Media[]
     private readonly units?: Unit[]
+    public readonly className: string
+    public readonly classes: CssClass[]
 
     constructor({
         className = '',

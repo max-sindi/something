@@ -42,9 +42,9 @@ export default class Tag extends Component {
   }
 
   render() {
-    // todo find why tag can be undefined
-    return !this.fragment.tag ? null : hyperscript(
-      this.fragment.tag,
+    // todo find why tag can be undefined, probably it refers to root fragment
+    return hyperscript(
+      this.fragment.tag || 'div',
       this.attrs,
       this.recursiveRenderChildren()
     )

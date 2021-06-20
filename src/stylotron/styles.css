@@ -2422,6 +2422,7 @@
 .grow-2 {flex-grow: 2}
 .grow-3 {flex-grow: 3}
 .flex-wrap {flex-wrap: wrap}
+.flex {display: flex}
 .flex-center {justify-content: center; align-items: center}
 .pre-wrap {white-space: pre-wrap}
 .text-wrap {white-space: wrap}

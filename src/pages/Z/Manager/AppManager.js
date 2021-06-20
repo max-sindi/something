@@ -9,7 +9,8 @@ export default class AppManager extends React.Component {
 
   render() {
     return (
-      <div className={'app-manager mb-20'}>App manager (soon)</div>
+      <div className={'app-manager'}></div>
+      // <div className={'app-manager mb-20'}>App manager (soon)</div>
     )
   }
 }

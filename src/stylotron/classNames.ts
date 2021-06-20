@@ -64,6 +64,7 @@ const classNames = [
         values: ['1', '2', '3']
     }),
     new CssSimpleClassBranch({ className: "flex-wrap",        fast: "flex-wrap: wrap",      media: true}),
+    new CssSimpleClassBranch({ className: "flex",        fast: "display: flex",      media: true}),
     new CssSimpleClassBranch({ className: "flex-center",  fast: "justify-content: center; align-items: center" }),
     new CssSimpleClassBranch({ className: "pre-wrap",    fast: "white-space: pre-wrap" }),
     new CssSimpleClassBranch({ className: "text-wrap",    fast: "white-space: wrap", media: true }),

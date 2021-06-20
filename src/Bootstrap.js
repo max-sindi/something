@@ -29,10 +29,10 @@ class Bootstrap extends Component {
     return (
       <div style={{width: '100vw', height: '100vh', display: 'flex', }}>
         <OnlineIndicator />
-        <ObjectExplorer data={this.props.store} objectKey={'store'}/>
+        {/*<ObjectExplorer data={this.props.store} objectKey={'store'}/>*/}
         <PageWrapper>
           <Router>
-            <Sidebar></Sidebar>
+            {/*<Sidebar></Sidebar>*/}
             <Main>
               <Route exact path={'/'} component={Dashboard}/>
               <Route exact path={'/my-projects'} component={MyProjects}/>

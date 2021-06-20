@@ -1,6 +1,7 @@
 export const generateColor = (a = 1, b = 1, c = 1) => {
   const args = [a, b, c]
-  return `rgba(${  color()  })`
+  return ['red', 'green', 'yellow', 'aqua', 'purple', 'violet', 'brown'][a]
+  // return `rgba(${  color()  })`
 
   function color() {
     return new Array(3)

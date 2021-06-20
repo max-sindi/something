@@ -1,7 +1,7 @@
 import React from 'react'
 import Subscriber from './subscriber'
 import RenderState from './RenderState'
-import Manager from './Manager/Manager'
+import Manager from './Manager/StateTreeManager'
 import {connect} from 'react-redux'
 
 
@@ -35,22 +35,18 @@ class Z extends React.Component {
     return this.state.mouseX && this.state.mouseY
   }
 
-
-
   api = {
     update: async data => {
-      const res = this.props.dispatch({
-        type: 'UPDATE_STATE', request: {url: '/z', method: 'post', data}
-      })
-
-      res.then(res => this.setState(cur => ({...cur, currentState: res.data})))
-
-      return res
+      return this.props
+        .dispatch({
+          type: 'UPDATE_STATE', request: { url: '/z', method: 'post', data }
+        })
+        .then(({ data: currentState }) => this.setState({ currentState }))
     },
 
     getCurrentState: (data) => {
       return this.props.dispatch({
-        type: 'GET_CURRENT_STATE', request: {url: '/z'}
+        type: 'GET_CURRENT_STATE', request: { url: '/z' }
       })
     }
   }
