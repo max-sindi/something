@@ -4,6 +4,7 @@ import {NavLink as Link} from 'react-router-dom'
 
 export default class Sidebar extends React.Component {
   render() {
+  return null
     return (
       <SidebarOuter>
         <LinkStyled>

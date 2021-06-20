@@ -30,7 +30,6 @@ export default class Tag extends Component {
 
   recursiveRenderChildren() {
     const {children} = this.props.fragment
-
     return children && children.map((child, index) => {
       return !_.isObject(child) ? (child || '') : (
           <Tag
@@ -43,7 +42,8 @@ export default class Tag extends Component {
   }
 
   render() {
-    return hyperscript(
+    // todo find why tag can be undefined
+    return !this.fragment.tag ? null : hyperscript(
       this.fragment.tag,
       this.attrs,
       this.recursiveRenderChildren()

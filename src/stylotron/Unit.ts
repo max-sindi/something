@@ -1,11 +1,11 @@
-import CssClassBranch from "./CssClassBranch"
+import CssUnitClassBranch from "./CssUnitClassBranch"
 import CssClass from "./CssClass"
 
 export default class Unit {
     unit: string
     limit: number
     minus: boolean
-    classBranch: CssClassBranch
+    classBranch: CssUnitClassBranch
     prefix?: string
     step: number
 
@@ -33,11 +33,11 @@ export default class Unit {
 
         const prefix = !prefixes.length ? '' : '-' + prefixes.join('-')
         const name = `${this.classBranch.className}-${integer}${prefix}`
-        const value = this.classBranch.createValue(
-         `${   integer * (minus ? -1 : 1)}` // - or +
+        const value = this.classBranch.createValue(String(
+         `${integer * (minus ? -1 : 1)}` // - or +
             +
-            `${integer !== 0 ? this.unit : ''}` // skip redundant unit for 0 position
-        )
+            `${integer !== 0 ? this.unit : ''}` // omit redundant unit for 0 value
+        ))
         return new CssClass({ name, value })
     }
 

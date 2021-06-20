@@ -1,14 +1,14 @@
-import CssClassBranch from "./CssClassBranch";
-import classNames from "./classNames";
+import CssUnitClassBranch from "./CssUnitClassBranch"
+import classBranches from "./classNames"
+import CssSimpleClassBranch from './CssSimpleClassBranch'
 const fs = require('fs')
 
 class ClassesStorage {
-  public classBranches: CssClassBranch[]
-  public pathRoot: string
+  private readonly classBranches: (CssUnitClassBranch | CssSimpleClassBranch)[]
+  private readonly pathRoot: string
 
-  constructor(classNames) {
-    // map and create styles
-    this.classBranches = classNames.map(config => new CssClassBranch(config))
+  constructor(classBranches) {
+    this.classBranches = classBranches
     this.pathRoot = 'src/stylotron/'
   }
 
@@ -17,8 +17,7 @@ class ClassesStorage {
     const content = this.classBranches
       .map(classBranch => classBranch.classes
         .map(cssClass =>
-          // create css class rule
-          `.${cssClass.name} {${cssClass.value}}`
+            cssClass.createCssRule()
         )
         .join('\n')
       ).join('\n')
@@ -41,7 +40,7 @@ class ClassesStorage {
 
 
 
-const classesStorage = new ClassesStorage(classNames)
+const classesStorage = new ClassesStorage(classBranches)
 classesStorage.generateCss()
 classesStorage.generateJson()
 

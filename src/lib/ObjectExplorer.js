@@ -45,6 +45,7 @@ class ObjectExpander extends React.Component {
     trackedPaths: []
   }
 
+  // todo fix naming
   hiddenToggle = () => {
     this.setState(state => ({
       hidden: !state.hidden
@@ -145,7 +146,7 @@ const ExploreData = ({data, objectKey, keys, isInitial, rootSetState}) => {
   }
 
   return (
-    <ValueRow>{objectKey || 'no key'}: {res},</ValueRow>
+    <ValueRow>{objectKey || 'no key'} : {res} , </ValueRow>
   )
 }
 

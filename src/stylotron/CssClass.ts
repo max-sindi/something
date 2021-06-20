@@ -1,9 +1,13 @@
 export default class CssClass {
-    name: string
-    value: string
+    private readonly name: string
+    private readonly value: string
 
     constructor({ name = '!noName!', value = '!noValue!' }) {
         this.name = name;
         this.value = value;
+    }
+
+    createCssRule() {
+        return `.${this.name} {${this.value}}`
     }
 }

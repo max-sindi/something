@@ -1,6 +1,6 @@
 import React from 'react'
 import {FaRegWindowClose} from 'react-icons/fa'
-import classNames from '../../classNames.json'
+import classNames from '../../stylotron/styles.json'
 
 console.log('classNames',classNames)
 

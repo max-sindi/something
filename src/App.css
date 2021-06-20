@@ -48,13 +48,13 @@
   padding-left: 2rem;
 }
 
-.relative {
-  position: relative;
-}
+/*.relative {*/
+/*  position: relative;*/
+/*}*/
 
-.absolute {
-  position: absolute;
-}
+/*.absolute {*/
+/*  position: absolute;*/
+/*}*/
 
 .right-top-corner {
   right: 15px;
@@ -67,7 +67,8 @@
 }
 
 .main {
-  width: calc(100% - 300px)
+  width: 100%;
+/*  width: calc(100% - 300px)*/
 }
 
 .html-manager {

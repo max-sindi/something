@@ -25,7 +25,7 @@ const initialMouseCoords = {
 
 class Z extends React.Component {
 
-  state = {...initialSelectingState, currentState: null, subscriber: {}}
+  state = {...initialSelectingState, currentState: null}
   mouseCoords = {...initialMouseCoords}
 
   get mouseX() {
