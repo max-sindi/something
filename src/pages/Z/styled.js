@@ -9,7 +9,8 @@ import React from 'react'
 
 export const TagWrapperStyled = styled.div`
   //background: ${({ deepLevel, indexInLevel, fragment }) => '#fff'}; 
-  background: ${({ deepLevel, indexInLevel, fragment }) => _.isObject(fragment) ? generateColor(deepLevel, indexInLevel) : '#fff'}; 
+  background: ${({ deepLevel, indexInLevel, fragment }) => generateColor(deepLevel, indexInLevel)}; 
+  // background: ${({ deepLevel, indexInLevel, fragment }) => _.isObject(fragment) ? generateColor(deepLevel, indexInLevel) : '#fff'}; 
   // ${({ isOpened }) => isOpened && 'border: 1px solid #234589'};
   box-shadow: 0 0 10px 0 #234589;
   // border: 1px solid #234589;

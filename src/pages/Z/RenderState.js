@@ -2,7 +2,7 @@ import React from 'react'
 import Tag from './Tag'
 import _ from "lodash"
 
-export default class RenderMarkup extends React.Component {
+export default class RenderState extends React.Component {
   render() {
     const template = _.get(this.props.currentState, 'template')
     return !template ? null : (

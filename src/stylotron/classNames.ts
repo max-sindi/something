@@ -2,11 +2,13 @@ import CssUnitClassBranch from "./CssUnitClassBranch"
 import CssSimpleClassBranch from "./CssSimpleClassBranch"
 
 const classNames = [
+    new CssSimpleClassBranch({ className: 'container', fast: 'max-width: 1200px; width: 100%; margin-left: auto; margin-right: auto; padding-left: 30px; padding-right: 30px'}),
+    new CssUnitClassBranch({ className: "w",           property: "width",           media: true,  percent:      200,    each5ValuesLimit: 400, eachValueLimit: 50, px: true, vh: 100}),
     new CssUnitClassBranch({ className: "h",           property: "height",          media: true,  percent:      200,    each5ValuesLimit: 200, eachValueLimit: 50, px: true, vh: 100}),
-    new CssUnitClassBranch({ className: "max-w",       property: "max-width",       media: true,  percent:      200,    each5ValuesLimit: 200,  px: true, vh: 100}),
+    new CssUnitClassBranch({ className: "max-w",       property: "max-width",       media: true,  percent:      200,    each5ValuesLimit: 800,  px: true, vh: 100}),
     new CssUnitClassBranch({ className: "max-h",       property: "max-height",      media: true,  percent:      200,    each5ValuesLimit: 200,  px: true, vh: 100}),
     new CssUnitClassBranch({ className: "min-w",       property: "min-width",       media: true,  percent:      200,    each5ValuesLimit: 200,  px: true, vh: 100}),
-    new CssUnitClassBranch({ className: "min-h",       property: "min-height",      media: true,  percent:      200,    each5ValuesLimit: 200,  px: true, vh: 100}),
+    new CssUnitClassBranch({ className: "min-h",       property: "min-height",      media: true,  percent:      200,    each5ValuesLimit: 700,  px: true, vh: 100}),
     new CssUnitClassBranch({ className: "p",           property: "padding",         media: true,  percent:      200,    each5ValuesLimit: 200,  px: true}),
     new CssUnitClassBranch({ className: "pl",          property: "padding-left",    media: true,  percent:      200,    each5ValuesLimit: 200,  px: true}),
     new CssUnitClassBranch({ className: "pr",          property: "padding-right",   media: true,  percent:      200,    each5ValuesLimit: 200,  px: true}),
@@ -59,6 +61,10 @@ const classNames = [
         ]
     }),
     new CssSimpleClassBranch({
+        className: "bg-cover",
+        fast: "background-size: cover"
+    }),
+    new CssSimpleClassBranch({
         property: 'flex-grow',
         classNameCreator: mdf => `grow-${mdf}`,
         values: ['1', '2', '3']
@@ -71,23 +77,41 @@ const classNames = [
     new CssSimpleClassBranch({ className: "text-no-wrap",    fast: "white-space: nowrap", media: true }),
     new CssSimpleClassBranch({ className: "bold",        fast: "font-weight: 700" }),
     new CssSimpleClassBranch({ className: "pointer",        fast: "cursor: pointer" }),
-    new CssSimpleClassBranch({ className: "fw-bold",     fast: "font-weight: 700" }),
-    new CssSimpleClassBranch({ className: "ls-027",      fast: "letter-spacing: 0.27px" }),
-    new CssSimpleClassBranch({ className: "ls-05",       fast: "letter-spacing: 0.54px" }),
-    new CssSimpleClassBranch({ className: "transform-left-top-center",     fast: "transform: translate(-50%, -50%)" }),  // both edges
-    new CssSimpleClassBranch({ className: "transform-right-top-center",    fast: "transform: translate(50%, -50%)" }), // useful transform values
-    new CssSimpleClassBranch({ className: "transform-left-bottom-center",  fast: "transform: translate(-50%, 50%)" }),
-    new CssSimpleClassBranch({ className: "transform-right-bottom-center", fast: "transform: translate(50%, 50%)" }),
-    new CssSimpleClassBranch({ className: "transform-right-center", fast: "transform: translateX(50%)"  }),  // edges center
-    new CssSimpleClassBranch({ className: "transform-left-center", fast: "transform: translateX(-50%)"  }),
-    new CssSimpleClassBranch({ className: "transform-top-center", fast: "transform: translateY(-50%)"   }),
-    new CssSimpleClassBranch({ className: "transform-bottom-center", fast: "transform: translateY(50%)" }),
-    new CssSimpleClassBranch({ className: "scale-75-p", fast: "transform: scale(0.75)", media: true }),
+    // new CssSimpleClassBranch({ className: "fw-bold",     fast: "font-weight: 700" }),
+    // new CssSimpleClassBranch({ className: "ls-027",      fast: "letter-spacing: 0.27px" }),
+    // new CssSimpleClassBranch({ className: "ls-05",       fast: "letter-spacing: 0.54px" }),
+    // new CssSimpleClassBranch({ className: "transform-left-top-center",     fast: "transform: translate(-50%, -50%)" }),  // both edges
+    // new CssSimpleClassBranch({ className: "transform-right-top-center",    fast: "transform: translate(50%, -50%)" }), // useful transform values
+    // new CssSimpleClassBranch({ className: "transform-left-bottom-center",  fast: "transform: translate(-50%, 50%)" }),
+    // new CssSimpleClassBranch({ className: "transform-right-bottom-center", fast: "transform: translate(50%, 50%)" }),
+    // new CssSimpleClassBranch({ className: "transform-right-center", fast: "transform: translateX(50%)"  }),  // edges center
+    // new CssSimpleClassBranch({ className: "transform-left-center", fast: "transform: translateX(-50%)"  }),
+    // new CssSimpleClassBranch({ className: "transform-top-center", fast: "transform: translateY(-50%)"   }),
+    // new CssSimpleClassBranch({ className: "transform-bottom-center", fast: "transform: translateY(50%)" }),
+    // new CssSimpleClassBranch({ className: "scale-75-p", fast: "transform: scale(0.75)", media: true }),
     new CssSimpleClassBranch({ className: "t-a", fast: "top: auto" }),
     new CssSimpleClassBranch({ className: "l-a", fast: "left: auto", media: true }),
 
     /* special */
-    new CssSimpleClassBranch({ className: 'container', fast: 'max-width: 1200px; width: 100%; margin-left: auto; margin-right: auto; padding-left: 30px; padding-right: 30px'})
+    new CssSimpleClassBranch({ className: 'hero-bg', fast: `background: url(http://localhost:3000/hero-bg.png) center center / cover`}),
+    new CssSimpleClassBranch({
+        className: 'color-white',
+        fast: `color: white`
+    }),
+    new CssSimpleClassBranch({
+        className: 'ff-primary',
+        fast: `font-family: Montserrat`
+    }),
+    new CssSimpleClassBranch({
+        classNameCreator: mdf => `fw-${mdf}`,
+        property: `font-weight`,
+        values: ['300', '500', '700', '800']
+    }),
+    new CssSimpleClassBranch({
+        classNameCreator: mdf => mdf,
+        property: `text-transform`,
+        values: ['capitalize', 'uppercase']
+    }),
 ];
 
 export default classNames

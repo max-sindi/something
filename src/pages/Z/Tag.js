@@ -46,7 +46,7 @@ export default class Tag extends Component {
     return hyperscript(
       this.fragment.tag || 'div',
       this.attrs,
-      this.recursiveRenderChildren()
+      this.fragment.tag !== 'input' ? this.recursiveRenderChildren() : undefined
     )
   }
 }

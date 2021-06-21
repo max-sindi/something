@@ -4,9 +4,9 @@ import * as _ from "lodash"
 export default class CssSimpleClassBranch {
     private readonly fast: string
     private readonly property: string
-    private readonly classNameCreator: (string) => string
+    private readonly classNameCreator: ((arg: string) => string) | undefined
     private readonly values: string[] | undefined
-    private readonly media: []
+    // private readonly media: []
     public readonly className: string
     public readonly classes: CssClass[]
 
@@ -18,7 +18,7 @@ export default class CssSimpleClassBranch {
         media = false,
         classNameCreator = undefined
     }) {
-        this.className = className
+        this.className = className || property
         this.fast = fast
         this.property = property
         this.values = values

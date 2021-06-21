@@ -73,7 +73,8 @@ class Z extends React.Component {
   }
 
   updateState = (newState) => {
-    this.setState(cur => ({...cur, currentState: newState}))
+    // update local state, and then remote state
+    this.setState(cur => ({...cur, currentState: newState}), this.saveState)
   }
   //
   //
