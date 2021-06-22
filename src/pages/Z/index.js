@@ -3,6 +3,7 @@ import Subscriber from './subscriber'
 import RenderState from './RenderState'
 import Manager from './Manager/StateTreeManager'
 import {connect} from 'react-redux'
+import _ from 'lodash'
 
 
 
@@ -68,9 +69,9 @@ class Z extends React.Component {
 
   }
 
-  saveState = () => {
+  saveState = _.debounce(() => {
     this.api.update(this.state.currentState)
-  }
+  }, 1000)
 
   updateState = (newState) => {
     // update local state, and then remote state
@@ -130,7 +131,7 @@ class Z extends React.Component {
   render() {
     const {state} = this
     return (
-      <div onMouseDown={this.startSelect} onMouseUp={this.stopSelect} style={{height: '100vh', width: '100%', background: '#98387444', position: 'relative'}}>
+      <div onMouseDown={this.startSelect} onMouseUp={this.stopSelect} className={`h-100-vh w-100-p relative`} style={{background: '#98387444'}}>
         {/*startY:{ state.startY}, startX: {state.startX}, <br/>*/}
         {/*mouseY: {this.mouseY},  mouseX: {this.mouseX},*/}
         {/*<div style={{position: 'absolute', ...this.getFrameDimentions, background: '#ff7341f5'}}/>*/}

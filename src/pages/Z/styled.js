@@ -15,7 +15,7 @@ export const TagWrapperStyled = styled.div`
   box-shadow: 0 0 10px 0 #234589;
   // border: 1px solid #234589;
   padding: 7px;
-  // padding-left: ${({deepLevel}) => `${deepLevel * 10}px`};
+  padding-left: ${({deepLevel}) => `${deepLevel * 10}px`};
   //padding-bottom: 20px;
   //min-height: 200px;
 `

@@ -93,14 +93,15 @@ const classNames = [
     new CssSimpleClassBranch({ className: "l-a", fast: "left: auto", media: true }),
 
     /* special */
-    new CssSimpleClassBranch({ className: 'hero-bg', fast: `background: url(http://localhost:3000/hero-bg.png) center center / cover`}),
+    new CssSimpleClassBranch({ className: 'hero-bg', fast: `background: url(http://localhost:3000/hero-bg.png) center / center cover`}),
+    new CssSimpleClassBranch({ className: 'recruiting-hero-bg', fast: `background: url(http://localhost:3000/Recruting-hero.png) center / cover`}),
     new CssSimpleClassBranch({
         className: 'color-white',
         fast: `color: white`
     }),
     new CssSimpleClassBranch({
         className: 'ff-primary',
-        fast: `font-family: Montserrat`
+        fast: `font-family: Maitree`
     }),
     new CssSimpleClassBranch({
         classNameCreator: mdf => `fw-${mdf}`,

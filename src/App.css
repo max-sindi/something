@@ -105,3 +105,11 @@ input {
   url('assets/fonts/montserrat-v15-latin-regular.ttf') format('truetype'), /* Safari, Android, iOS */
   url('assets/fonts/montserrat-v15-latin-regular.svg#Montserrat') format('svg'); /* Legacy iOS */
 }
+@font-face {
+  font-family: 'Maitree';
+  font-style: normal;
+  font-weight: 400;
+  src: url('assets/fonts/montserrat-v15-latin-regular.eot'); /* IE9 Compat Modes */
+  src: local(''),
+  url('assets/fonts/Maitree-Regular.ttf') format('ttf') /* Modern Browsers */
+}

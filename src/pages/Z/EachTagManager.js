@@ -76,10 +76,14 @@ class EachTagManager extends React.Component {
         children[secondIndex] = firstElement
         return {...parent, children}
     })
+    onNameChange = ({target: {value: name}}) => this.transform(old => ({ ...old, name }))
+    onAttrsChange = ({target: {value: attrs}}) => this.transform(old => ({ ...old, attrs }))
     createDiv = ({children = []} = {}) => ({
         children,
         tag: 'div',
-        className: '_debug__newly_added'
+        className: '_debug__newly_added',
+        name: '',
+        attrs: ''
     })
     // transformer is passing to lodash.updateWith and mutates current node
     transform = (transformer, xpath = this.props.xpath) => {
@@ -99,12 +103,19 @@ class EachTagManager extends React.Component {
         this.save(clone)
     }
 
-    tags = ['div', 'span', 'input']
+    tags = ['div', 'span', 'input', 'img', 'a', 'button']
     onTagSelect = ({ target: { value: tag }}) => this.transform(node => ({ ...node, tag }))
-    renderTagSelect = () => (
+    // renderTagSelect = () => (
+    //     <select value={this.props.fragment.tag} onChange={this.onTagSelect}>
+    //         {this.tags.map(tag => (
+    //             <option value={tag} label={tag} key={tag}/>
+    //         ))}
+    //     </select>
+    // )
+    rendererTagSelect = () => (
         <select value={this.props.fragment.tag} onChange={this.onTagSelect}>
             {this.tags.map(tag => (
-                <option value={tag} label={tag} />
+                <option value={tag} label={tag} key={tag}/>
             ))}
         </select>
     )
@@ -132,14 +143,12 @@ class EachTagManager extends React.Component {
 
 
     render() {
+        if(_.isNull(this.props.fragment)) return null
         const {deepLevel, indexInLevel, first, lastInLevel} = this.props
         const {isOpened} = this.state
         const fragment = this.props.fragment
         const isObject = _.isObject(fragment)
-
-        if(_.isNull(fragment)) {
-            return null
-        }
+        console.log(fragment)
 
         return (
             <TagWrapper isOpened={isOpened} deepLevel={deepLevel} indexInLevel={indexInLevel} {...this.props}>
@@ -148,7 +157,7 @@ class EachTagManager extends React.Component {
                         ? <aiIcons.AiOutlineMinusSquare onClick={this.toggleVisibility} size={15}/>
                         : <aiIcons.AiOutlinePlusSquare onClick={this.toggleVisibility} size={15}/>
                     }
-                    {!first && isObject && <span className={`pl-5`}>tag: {this.renderTagSelect()}</span>}
+                    {!first && isObject && <span className={`pl-5`}>tag: {this.rendererTagSelect()}</span>}
                 </div>
 
                 {first && isObject && this.recursiveRenderChildren()}
@@ -158,16 +167,20 @@ class EachTagManager extends React.Component {
                     {!first && isObject && (
                         <>
                             <div className={`flex align-center mt-10 pointer`} onClick={this.makeItText} title={'Make it text'}>
-                                <AiOutlineCodeSandbox size={15} style={{marginRight: 4}}/>
-                                <FaEquals size={15} style={{marginTop: 2}}/>
-                                <FaAngleRight size={15} className={'mr-5-minus'} style={{marginLeft: -4}}/>
-                                <gameIcons.GoTextSize size={15} style={{marginTop: -2, marginLeft: 6}}/>
+                                <AiOutlineCodeSandbox size={15} />
+                                <FaEquals size={15} />
+                                <FaAngleRight size={15} className={'mr-5-minus'} />
+                                <gameIcons.GoTextSize size={15} className={`ml-5`} />
                             </div>
-                            <label className={'flex align-center pb-10 pt-10'} >
-                            <RiPaintBrushLine size={30} className={'mr-5'}/>
-                            <input type="text" value={fragment.className} onChange={this.changeClassName} className={`grow-1`} style={{marginTop: 2}}/>
+                            <label className={'flex align-center pb-10 pt-10 mr-10'} >
+                                {/*<RiPaintBrushLine size={30} className={'mr-5'} />*/}
+                                <span className={`fz-40 ml-10`}>.</span>
+                                <input type="text" value={fragment.className} onChange={this.changeClassName} className={`grow-1 w-400`} />
                             </label>
-
+                            Name:
+                            <input type="text" value={fragment.name || ''} onChange={this.onNameChange}/>
+                            Attrs:
+                            <textarea value={fragment.attrs || ''} onChange={this.onAttrsChange} className={`w-400`}/>
                             <AiOutlineFileAdd size={15} onClick={this.addNewChild} title={'Add child +'} />
 
                         </>
