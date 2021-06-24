@@ -34,7 +34,7 @@ const expandedLog = (function(){
     depth = depth || 0;
 
     if (depth > MAX_DEPTH ) {
-      console.log(item);
+      // console.log(item);
       return;
     }
 
@@ -45,7 +45,7 @@ const expandedLog = (function(){
         console.groupEnd();
       });
     } else {
-      console.log(item);
+      // console.log(item);
     }
   }
 })();

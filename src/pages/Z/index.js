@@ -42,7 +42,7 @@ class Z extends React.Component {
         .dispatch({
           type: 'UPDATE_STATE', request: { url: '/z', method: 'post', data }
         })
-        .then(({ data: currentState }) => this.setState({ currentState }))
+        // .then(({ data: currentState }) => this.setState({ currentState }))
     },
 
     getCurrentState: (data) => {
@@ -62,7 +62,7 @@ class Z extends React.Component {
       // const subscriber = new Subscriber({api})
       const {data: currentState} = await api.getCurrentState()
       // const updateResult = await api.update(currentState)
-      console.log('currentState', currentState)
+      // console.log('currentState', currentState)
       this.setState({currentState})
     //
     })()
@@ -142,9 +142,9 @@ class Z extends React.Component {
         {/* render tools */}
         {state.currentState && <Manager save={this.updateState} currentState={state.currentState}/>}
 
-        <button onClick={this.saveState} className={`fixed t-60 r-40`}>
-          Save
-        </button>
+        {/*<button onClick={this.saveState} className={`fixed t-60 r-40`}>*/}
+        {/*  Save*/}
+        {/*</button>*/}
       </div>
     )
   }

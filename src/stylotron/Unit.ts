@@ -1,5 +1,6 @@
 import CssUnitClassBranch from "./CssUnitClassBranch"
 import CssClass from "./CssClass"
+import * as _ from 'lodash'
 
 export default class Unit {
     unit: string
@@ -31,12 +32,12 @@ export default class Unit {
             minus && 'minus'
         ].filter(Boolean)
 
-        const prefix = !prefixes.length ? '' : '-' + prefixes.join('-')
+        const prefix = _.isEmpty(prefixes) ? '' : '-' + prefixes.join('-')
         const name = `${this.classBranch.className}-${integer}${prefix}`
         const value = this.classBranch.createValue(String(
          `${integer * (minus ? -1 : 1)}` // - or +
             +
-            `${integer !== 0 ? this.unit : ''}` // omit redundant unit for 0 value
+            `${integer == 0 ? '' : this.unit}` // omit redundant unit for 0 value
         ))
         return new CssClass({ name, value })
     }

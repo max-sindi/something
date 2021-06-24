@@ -47,7 +47,7 @@ class EachTagManager extends React.Component {
         // console.log('elem',elem)
 
         if(!elem) {
-            console.warn('no elem, ref to alpha')
+            console.warn('no element found, ref to alpha')
             elem = clonedTemplate
         }
 
@@ -83,8 +83,12 @@ class EachTagManager extends React.Component {
         tag: 'div',
         className: '_debug__newly_added',
         name: '',
-        attrs: ''
+        attrs: '{}'
     })
+    duplicateNode = () => this.transformParent(parent => ({
+        ...parent,
+        children: [...parent.children, _.cloneDeep(parent.children[this.props.indexInLevel])]
+    }))
     // transformer is passing to lodash.updateWith and mutates current node
     transform = (transformer, xpath = this.props.xpath) => {
         // @todo continue
@@ -94,6 +98,7 @@ class EachTagManager extends React.Component {
             xpath || 'value'
         ]
 
+        // @todo refactor with "? :" in 3rd argument
         if(_.isFunction(transformer)) {
             _.updateWith(...firstTwoArgs, transformer)
         } else {
@@ -123,7 +128,7 @@ class EachTagManager extends React.Component {
         this.state.isOpened
         &&
         this.props.fragment.children.map((child, index, arr) =>
-            <div key={index} className={`mt-5`}>
+            <div key={index} className={`mt-5 w-100-percent`}>
                 {/*{!_.isObject(child) ? child : (*/}
                 <EachTagManager
                     {...this.props}
@@ -148,21 +153,21 @@ class EachTagManager extends React.Component {
         const {isOpened} = this.state
         const fragment = this.props.fragment
         const isObject = _.isObject(fragment)
-        console.log(fragment)
+        // console.log(fragment)
 
         return (
             <TagWrapper isOpened={isOpened} deepLevel={deepLevel} indexInLevel={indexInLevel} {...this.props}>
-                <div className={`flex align-center`}>
+                <div className={`flex align-center w-100-p`}>
                     {isOpened
                         ? <aiIcons.AiOutlineMinusSquare onClick={this.toggleVisibility} size={15}/>
                         : <aiIcons.AiOutlinePlusSquare onClick={this.toggleVisibility} size={15}/>
                     }
-                    {!first && isObject && <span className={`pl-5`}>tag: {this.rendererTagSelect()}</span>}
-                </div>
+                    {!first && isObject && <span className={`pl-5`}>Tag: {this.rendererTagSelect()}</span>}
+                {/*</div>*/}
 
                 {first && isObject && this.recursiveRenderChildren()}
 
-                <div className={`d-flex align-center`}>
+                {/*<div className={`d-flex align-flex-end`}>*/}
                     {/* object elements */}
                     {!first && isObject && (
                         <>
@@ -172,17 +177,21 @@ class EachTagManager extends React.Component {
                                 <FaAngleRight size={15} className={'mr-5-minus'} />
                                 <gameIcons.GoTextSize size={15} className={`ml-5`} />
                             </div>
-                            <label className={'flex align-center pb-10 pt-10 mr-10'} >
+                            <div className="mr-20 ml-20">Name: </div>
+                            <textarea value={fragment.name || ''} onChange={this.onNameChange} className={`mr-20`}/>
+
+                            <label className={'flex align-flex-end mr-10'} >
                                 {/*<RiPaintBrushLine size={30} className={'mr-5'} />*/}
-                                <span className={`fz-40 ml-10`}>.</span>
-                                <input type="text" value={fragment.className} onChange={this.changeClassName} className={`grow-1 w-400`} />
+                                <span className={`mr-10`}>ClassName: </span>
+                                <textarea value={fragment.className} onChange={this.changeClassName} className={`grow-1 w-200`} />
                             </label>
-                            Name:
-                            <input type="text" value={fragment.name || ''} onChange={this.onNameChange}/>
-                            Attrs:
-                            <textarea value={fragment.attrs || ''} onChange={this.onAttrsChange} className={`w-400`}/>
+                            <div className="mr-20">Attrs: </div>
+                            <textarea value={fragment.attrs || ''} onChange={this.onAttrsChange} className={`w-200 mr-20`}/>
                             <AiOutlineFileAdd size={15} onClick={this.addNewChild} title={'Add child +'} />
 
+                            <div className={`pointer`} onClick={this.duplicateNode}>
+                                1 + 1
+                            </div>
                         </>
                     )}
 
@@ -226,7 +235,7 @@ class EachTagManager extends React.Component {
 
                 </div>
                 {!first && isObject && (
-                    <div className={`pt-5 pb-5`}>
+                    <div className={`pt-5 pb-5 mt-10`}>
                         <ClassNamesSelector onChange={this.changeClassNamesList} value={fragment.className}/>
                         {this.recursiveRenderChildren()}
                     </div>

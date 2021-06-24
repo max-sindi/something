@@ -56,7 +56,7 @@ export default class Tag extends Component {
   render() {
     const children = this.canTagHaveChildren(this.fragment.tag) ? this.recursiveRenderChildren() : undefined
 
-    // todo find why tag can be undefined, probably it happens with root fragment
+    // todo find reason why tag can be undefined, probably it happens with root fragment
     return hyperscript(
       this.fragment.tag || 'div',
       this.attrs,
