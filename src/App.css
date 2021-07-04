@@ -125,3 +125,13 @@ input {
 a {
   font-family: inherit;
 }
+
+.button-primary {
+  border: 1px solid #C79B7A;
+  border-radius: 3px;
+  background: transparent;
+  color: #fff;
+  font-weight: 700;
+  padding: 10px 25px;
+  font-family: "Maitree";
+}

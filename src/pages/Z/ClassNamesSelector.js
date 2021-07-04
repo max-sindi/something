@@ -42,7 +42,7 @@ const ClassNamesSelector = ({ value = '', onChange }) => {
           {value && deconstructed.map(cls =>
               (
                   <div className={`mr-5 flex align-center text-no-wrap`} key={cls}>
-                      {cls}
+                      .{cls}
                       <FaRegWindowClose onClick={() => _delete(cls)} size={20} style={{marginLeft: 3}}/>
                   </div>
               ))}

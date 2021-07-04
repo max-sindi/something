@@ -1,8 +1,7 @@
 import React, {Component} from 'react'
 import PropTypes from "prop-types"
 import _ from "lodash"
-var hyperscript = require('react-hyperscript')
-
+const hyperscript = require('react-hyperscript')
 
 
 export default class Tag extends Component {
@@ -34,6 +33,7 @@ export default class Tag extends Component {
       ...dynamicAttrs
     }
   }
+
   get fragment() {
     return this.props.fragment
   }

@@ -89,8 +89,8 @@ class EachTagManager extends React.Component {
         ...parent,
         children: [...parent.children, _.cloneDeep(parent.children[this.props.indexInLevel])]
     }))
-    // transformer is passing to lodash.updateWith and mutates current node
-    transform = (transformer, xpath = this.props.xpath) => {
+    // updater passes to lodash.updateWith 3d arg and mutates current node
+    transform = (updater, xpath = this.props.xpath) => {
         // @todo continue
         const clone = this.createClone()
         const firstTwoArgs = [
@@ -99,17 +99,17 @@ class EachTagManager extends React.Component {
         ]
 
         // @todo refactor with "? :" in 3rd argument
-        if(_.isFunction(transformer)) {
-            _.updateWith(...firstTwoArgs, transformer)
+        if(_.isFunction(updater)) {
+            _.updateWith(...firstTwoArgs, updater)
         } else {
-            _.updateWith(...firstTwoArgs, () => transformer)
+            _.updateWith(...firstTwoArgs, () => updater)
         }
 
         this.save(clone)
     }
 
     tags = ['div', 'span', 'input', 'img', 'a', 'button']
-    onTagSelect = ({ target: { value: tag }}) => this.transform(node => ({ ...node, tag }))
+    onTagSelect = ({target: {value: tag}}) => this.transform(node => ({ ...node, tag }))
     // renderTagSelect = () => (
     //     <select value={this.props.fragment.tag} onChange={this.onTagSelect}>
     //         {this.tags.map(tag => (
@@ -149,9 +149,8 @@ class EachTagManager extends React.Component {
 
     render() {
         if(_.isNull(this.props.fragment)) return null
-        const {deepLevel, indexInLevel, first, lastInLevel} = this.props
+        const {deepLevel, indexInLevel, first, lastInLevel, fragment} = this.props
         const {isOpened} = this.state
-        const fragment = this.props.fragment
         const isObject = _.isObject(fragment)
         // console.log(fragment)
 

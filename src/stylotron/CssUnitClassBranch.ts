@@ -27,7 +27,7 @@ export default class CssUnitClassBranch {
         this.className = className
         this.property = property
         this.classes = []
-        // todo units can and should be declared explicitly, right in Class instantiating
+        // todo units can (and should) be declared explicitly, right in Class instantiating
         this.units = [
             px && new Unit({ unit: 'px', limit: eachValueLimit, step: 1, classBranch: this, minus }),
             px && new Unit({ unit: 'px', limit: each5ValuesLimit, step: 5, classBranch: this, minus }),
