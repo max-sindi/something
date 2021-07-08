@@ -6,10 +6,11 @@ import * as aiIcons from "react-icons/ai";
 import {AiOutlineCodeSandbox, AiOutlineFileAdd} from "react-icons/ai";
 import {FaAngleRight, FaEquals} from "react-icons/fa";
 import * as gameIcons from "react-icons/go";
-import {RiEditLine, RiPaintBrushLine} from "react-icons/ri";
+import {RiEditLine} from "react-icons/ri";
 import * as githubIcons from "react-icons/gi";
 import {MdArrowDownward, MdArrowUpward} from "react-icons/md";
 import ClassNamesSelector from "./ClassNamesSelector";
+import ObjectEditor from "./ObjectEditor"
 
 class EachTagManager extends React.Component {
     state = {
@@ -89,6 +90,7 @@ class EachTagManager extends React.Component {
         ...parent,
         children: [...parent.children, _.cloneDeep(parent.children[this.props.indexInLevel])]
     }))
+    createFieldUpdater = (path) => value => this.transform(old => ({ ...old, [path]: value }))
     // updater passes to lodash.updateWith 3d arg and mutates current node
     transform = (updater, xpath = this.props.xpath) => {
         // @todo continue
@@ -145,6 +147,13 @@ class EachTagManager extends React.Component {
             </div>
         )
     )
+    stylesExisting = [
+        {
+            name: 'backgroundImage',
+            fileSelectable: true,
+            fileValueCreator: fileName => `url('http://localhost:8000${fileName}')`
+        }
+    ]
 
 
     render() {
@@ -234,10 +243,19 @@ class EachTagManager extends React.Component {
 
                 </div>
                 {!first && isObject && (
-                    <div className={`pt-5 pb-5 mt-10`}>
-                        <ClassNamesSelector onChange={this.changeClassNamesList} value={fragment.className}/>
-                        {this.recursiveRenderChildren()}
-                    </div>
+                    <>
+                        <div className={`pt-5 pb-5 mt-10`}>
+                            // classes
+                            <ClassNamesSelector onChange={this.changeClassNamesList} value={fragment.className}/>
+                            // styles
+                            <ObjectEditor
+                                onChange={this.createFieldUpdater('style')}
+                                value={fragment.style}
+                                fields={this.stylesExisting}
+                            />
+                            {this.recursiveRenderChildren()}
+                        </div>
+                    </>
                 )}
 
             </TagWrapper>

@@ -4,8 +4,9 @@ import RenderState from './RenderState'
 import Manager from './Manager/StateTreeManager'
 import {connect} from 'react-redux'
 import _ from 'lodash'
-import Project from '../../mobX/core'
-import {observer} from "mobx-react";
+import ProjectEntity from '../../mobX/core'
+import {observer} from "mobx-react"
+import project from "../../mobX/core";
 // import {observer} from 'mobx'
 
 
@@ -163,8 +164,7 @@ const Z = observer(
     }
 )
 
-// export default connect(...connectArgs)(Z)
+// export default connect(...connectArgs)(Project)
 
-// const ZObserver = observer(props => <Z {...props} />)
-const project = new Project()
+// const ZObserver = observer(props => <Project {...props} />)
 export default props => <Z {...props} project={project}/>

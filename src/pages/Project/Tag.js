@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import PropTypes from "prop-types"
 import _ from "lodash"
+import {toJS} from 'mobx'
 const hyperscript = require('react-hyperscript')
 
 
@@ -19,18 +20,24 @@ export default class Tag extends Component {
   get attrs() {
     const dynamicAttrs = (() => {
       try {
-        return JSON.parse(this.props.fragment.attrs)
+        return JSON.parse(this.props.fragment.attrs || '{}')
       } catch (e) {
         return {}
       }
     })();
-
+    // console.log(toJS(this.props.fragment.attrs))
+    // console.log(toJS(JSON.parse(this.props.fragment.attrs || '{}')))
+    // console.log(toJS(this.props.fragment.style || {}))
+    // console.log(dynamicAttrs)
+    console.log(toJS(this.props.fragment.style || {}))
+    const style = {...toJS(this.props.fragment.style || {}), color: "red"}
     return {
       'data-deep-level': this.props.deepLevel + 1,
       'data-index-in-level': this.props.indexInLevel,
       'data-name': this.fragment.name || '',
       'className': this.props.fragment.className,
-      ...dynamicAttrs
+      ...dynamicAttrs,
+      style,
     }
   }
 
@@ -55,7 +62,6 @@ export default class Tag extends Component {
 
   render() {
     const children = this.canTagHaveChildren(this.fragment.tag) ? this.recursiveRenderChildren() : undefined
-
     // todo find reason why tag can be undefined, probably it happens with root fragment
     return hyperscript(
       this.fragment.tag || 'div',

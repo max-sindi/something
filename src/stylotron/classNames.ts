@@ -104,6 +104,10 @@ const classNames = [
         fast: `font-family: Maitree`
     }),
     new CssSimpleClassBranch({
+        className: 'black',
+        fast: `color: #111`
+    }),
+    new CssSimpleClassBranch({
         classNameCreator: mdf => `fw-${mdf}`,
         property: `font-weight`,
         values: ['300', '500', '700', '800']

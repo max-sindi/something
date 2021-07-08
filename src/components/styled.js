@@ -1,4 +1,4 @@
-import BG from './assets/BG.jpg'
+// import BG from './assets/BG.jpg'
 import style from 'styled-components'
 import {onlineGreen, onlineRed} from './colors'
 
@@ -22,9 +22,9 @@ export const TypeableFieldDimensions = style(FocusedEffects)`
   width: 90vw;
   box-sizing: border-box;
 `
-export const Background = style(Cover)`
-  background: url(${BG});
-`
+// export const Background = style(Cover)`
+//   background: url(${BG});
+// `
 export const Opacity = style(Cover)`
   background-color: rgba(0, 0, 0, ${pr => pr.isFocused ? '0.9' : '0.7'});
   opacity: ${pr => pr.isFocused};

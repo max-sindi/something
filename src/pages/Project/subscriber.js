@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export default class Z {
-  constructor({api}) {
+  constructor({ api }) {
     this.api = api
   }
 
