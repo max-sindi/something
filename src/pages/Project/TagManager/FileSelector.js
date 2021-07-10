@@ -1,11 +1,11 @@
 import React from 'react'
 import {observer} from 'mobx-react'
-import project from '../../mobX/core'
+import project from '../../../mobX/project'
 
 const FileSelector = observer(({ project, onChange }) => {
   return (
     <div>
-      {project.project.files.map(fileName => (
+      {project.data.files.map(fileName => (
         <div
           className={`flex pointer m-5`}
           onClick={() => onChange(fileName)}

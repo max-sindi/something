@@ -1,13 +1,9 @@
 import React from 'react'
-import Subscriber from './subscriber'
-import RenderState from './RenderState'
-import Manager from './Manager/StateTreeManager'
-import {connect} from 'react-redux'
-import _ from 'lodash'
-import ProjectEntity from '../../mobX/core'
+import RenderState from './MarkupRenderer'
+import Manager from './StateTreeManager'
 import {observer} from "mobx-react"
-import project from "../../mobX/core";
-// import {observer} from 'mobx'
+import project from "../../mobX/project"
+import {toJS} from 'mobx'
 
 
 
@@ -28,8 +24,8 @@ const initialMouseCoords = {
   Y:null
 }
 
-const Z = observer(
-    class Z extends React.Component {
+const Project = observer(
+    class Project extends React.Component {
 
       state = {...initialSelectingState, currentState: null}
       mouseCoords = {...initialMouseCoords}
@@ -141,19 +137,19 @@ const Z = observer(
       // }
 
       render() {
-        // const {state} = this
-        const {project} = this.props.project
+        const {data: currentStateObserved} = this.props.project
+        const currentState = toJS(currentStateObserved)
         return (
             <div onMouseDown={this.startSelect} onMouseUp={this.stopSelect} className={`h-100-vh w-100-p relative`} style={{background: '#98387444'}}>
               {/*startY:{ state.startY}, startX: {state.startX}, <br/>*/}
               {/*mouseY: {this.mouseY},  mouseX: {this.mouseX},*/}
               {/*<div style={{position: 'absolute', ...this.getFrameDimentions, background: '#ff7341f5'}}/>*/}
 
-              {/* render current markup */}
-              {project && <RenderState currentState={project}/>}
+              {/* current state view */}
+              {currentState && <RenderState currentState={currentState}/>}
 
-              {/* render tools */}
-              {project && <Manager save={this.updateState} currentState={project}/>}
+              {/* tools */}
+              {currentState && <Manager save={this.updateState} currentState={currentState} />}
 
               {/*<button onClick={this.saveState} className={`fixed t-60 r-40`}>*/}
               {/*  Save*/}
@@ -164,7 +160,4 @@ const Z = observer(
     }
 )
 
-// export default connect(...connectArgs)(Project)
-
-// const ZObserver = observer(props => <Project {...props} />)
-export default props => <Z {...props} project={project}/>
+export default props => <Project {...props} project={project}/>

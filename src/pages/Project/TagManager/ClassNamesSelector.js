@@ -1,6 +1,6 @@
 import React from 'react'
 import {FaRegWindowClose} from 'react-icons/fa'
-import classNames from '../../stylotron/styles.json'
+import classNames from '../../../stylotron/styles.json'
 import DropDownMenuSelect from 'react-nested-menu-selector'
 
 // const selectGroups = classNames.classBranches.map(branch =>
@@ -24,11 +24,10 @@ const options = {
     }))
 }
 
-const ClassNamesSelector = ({ value = '', onChange }) => {
+const ClassNamesSelector = ({ value = '', onChange, ...props }) => {
     const deconstructed = value.trim().split(' ')
     const _delete = cls => onChange(deconstructed.filter(i => i !== cls).join(' '))
     const onClick = newValue => onChange(value + ' ' + newValue)
-
     return (
         <div className={`d-flex align-center`}>
             <DropDownMenuSelect

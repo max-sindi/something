@@ -1,5 +1,4 @@
 import axios, {AxiosInstance} from "axios"
-import {attempt} from 'lodash'
 
 
 class HttpDriver {
@@ -9,14 +8,14 @@ class HttpDriver {
         this.driver = axios.create({ baseURL: 'http://localhost:8000/api' })
     }
 
-    get(url) {
+    get(url: string) {
         return () => this.driver.get(url)
     }
-    update(url) {
-        return (data) => this.driver.put(url, data)
+    update(url: string) {
+        return (data: any) => this.driver.put(url, data)
     }
-    post(url) {
-        return (data) => this.driver.post(url, data)
+    post(url: string) {
+        return (data: any) => this.driver.post(url, data)
     }
 }
 
@@ -35,7 +34,7 @@ class AppHttpDriver {
     }
 
     online = {
-        track: (cb: (any) => void, _catch?: (any) => void) => {
+        track: (cb: (arg0: any) => void, _catch?: (arg0: any) => void) => {
             const fetchOnline = () => this.driver.get('/services/ping')().then(cb).catch(_catch)
             setTimeout(fetchOnline, 0)
             setInterval(fetchOnline, 10000)

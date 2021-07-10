@@ -1,9 +1,9 @@
 import React from "react"
 import PropTypes from "prop-types"
 import _ from "lodash"
-import EachTagManager from '../EachTagManager'
-import {ButtonExtendComponent, ButtonAddNewChild} from '../../../lib/ObjectExplorer'
-import {TagWrapper} from '../styled'
+import EachTagManager from './EachTagManager'
+import {ButtonExtendComponent, ButtonAddNewChild} from '../../lib/ObjectExplorer'
+import {TagWrapper} from './TagManager/styled'
 import * as githubIcons from 'react-icons/gi'
 import * as gameIcons from 'react-icons/go'
 import * as aiIcons from 'react-icons/ai'
@@ -15,7 +15,7 @@ import {TiArrowForward} from 'react-icons/ti'
 import {AiOutlineCodeSandbox} from 'react-icons/ai'
 import {RiEditLine, RiPaintBrushLine} from 'react-icons/ri'
 import {MdArrowDownward, MdArrowUpward} from 'react-icons/md'
-import ClassNamesSelector from '../ClassNamesSelector'
+import ClassNamesSelector from './TagManager/ClassNamesSelector'
 
 // import subscriber from '../subscriber'
 // import ReactSelect from 'react-select'
