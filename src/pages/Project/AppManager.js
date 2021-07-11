@@ -18,7 +18,6 @@ class AppManager extends React.Component {
   }
 
   render() {
-    console.log(123)
     return (
       <div className={'app-manager'}>
         <form action="http://localhost:8000/api/z/asset" method="post" encType="multipart/form-data">

@@ -16,6 +16,8 @@ import {AiOutlineCodeSandbox} from 'react-icons/ai'
 import {RiEditLine, RiPaintBrushLine} from 'react-icons/ri'
 import {MdArrowDownward, MdArrowUpward} from 'react-icons/md'
 import ClassNamesSelector from './TagManager/ClassNamesSelector'
+import {useRecoilState} from 'recoil'
+import {popupState} from './hook/popup'
 
 // import subscriber from '../subscriber'
 // import ReactSelect from 'react-select'
@@ -27,7 +29,7 @@ import ClassNamesSelector from './TagManager/ClassNamesSelector'
 window.lodash = _
 
 const expandedLog = (function(){
-  var MAX_DEPTH = 100;
+  const MAX_DEPTH = 100;
 
   return function(item, depth){
 
@@ -51,29 +53,29 @@ const expandedLog = (function(){
 })();
 
 
-export default class HtmlManager extends React.Component {
-  static propTypes = {
-    currentState: PropTypes.object,
-  }
+const HtmlManager = props => {
+  const template = _.get(props.currentState, 'template')
+  const [popup, setPopup] = useRecoilState(popupState)
 
-  render() {
-    const template = _.get(this.props.currentState, 'template')
-
-    return (
-      <div className={"html-manager"}>
-        {/*<h4 className={`mb-20`}>HTML manager </h4>*/}
-        {/*{template.map((fragment, index) =>*/}
-          <EachTagManager
-            first={true}
-            fragment={template}
-            key={0}
-            indexInLevel={0}
-            parentXpath={``}
-            xpath={``}
-            {...this.props}
-          />
-        {/*)}*/}
-      </div>
-    )
-  }
+  return (
+    <div className={"html-manager"}>
+      {/*<h4 className={`mb-20`}>HTML manager </h4>*/}
+      {/*{template.map((fragment, index) =>*/}
+      <EachTagManager
+        first={true}
+        fragment={template}
+        key={0}
+        indexInLevel={0}
+        parentXpath={``}
+        xpath={``}
+        popup={popup}
+        setPopup={setPopup}
+        {...props}
+      />
+      {/*)}*/}
+    </div>
+  )
 }
+
+export default HtmlManager
+

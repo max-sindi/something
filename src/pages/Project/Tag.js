@@ -46,6 +46,7 @@ class Tag extends Component {
       style: toJS(this.props.fragment.style || {}),
       onClick: event => {
         event.stopPropagation()
+        event.preventDefault()
         const top = event.clientY
         const left = event.clientX
         this.props.setPopup({
@@ -67,6 +68,10 @@ class Tag extends Component {
 
   get fragment() {
     return this.props.fragment
+  }
+
+  get tag() {
+    return (this.props.fragment || {tag: ''}).tag
   }
 
   recursiveRenderChildren = () =>

@@ -9,10 +9,12 @@ const ObjectEditor = ({
     fields = [],
     allowCreateNewFields = false,
     value = {},
-    onChange
+    onChange,
+    title = ""
 }) => {
     return (
-        <div className={`flex align-center`}>
+        <div className={`flex align-center flex-wrap`}>
+            _______________________________________
                 {fields.map(({
                      name = '',
                      fileSelectable = false,
@@ -30,28 +32,29 @@ const ObjectEditor = ({
                     }
 
                     return (
-                      <React.Fragment key={name}>
-                        Property
-                        <select name="" id="">
-                          <option value={name} label={name} />
-                        </select>
-                          {value[name]};
+                      <div key={name} className={`flex align-center`}>
+                        <div className={`w-100-p bold mb-5 mr-15 fz-20`}>{title}</div>
+                          <div className={`flex align-center w-100-p`}>
+                              <select name="" id="" className={`ml-10`}>
+                                  <option value={name} label={name} />
+                              </select>
+                              <FaRegWindowClose onClick={() => _delete(name)} size={20} className={`mr-10 ml-10 min-w-20`}/>
+                              {value[name]};
 
-                          <FaRegWindowClose onClick={() => _delete(name)} size={20}/>
-                          {/*<div>*/}
                               {fileSelectable && (
                                 <Tooltip
                                   trigger={['hover']}
                                   overlay={<FileSelector onChange={onFileChange} />}
                                   placement={`top`}
                                 >
-                                  <button className={`black`}> File?</button>
+                                    <button className={`black`}> File?</button>
                                 </Tooltip>
                               )}
-                          {/*</div>*/}
-                      </React.Fragment>
+                          </div>
+                      </div>
                     )
                 })}
+            _______________________________________
         </div>
     );
 };

@@ -1,12 +1,14 @@
 const {atom} = require('recoil')
 
+const defaultState = {
+  coords: null,
+  fragment: null,
+  domElement: null
+}
+export const closePopup = setState => setState(defaultState)
 interface ICoords {top: number, left: number}
 export const popupState = atom({
   key: "popup",
-  default: {
-    coords: null,
-    fragment: null,
-    domElement: null
-  }
+  default: defaultState
 })
 

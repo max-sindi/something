@@ -10,7 +10,6 @@ class StateTreeManager extends React.Component {
   }
 
   render = () => {
-    console.log(this.props)
     return (
       <div style={{background: '#32D4CB'/*, padding: 20*/}}>
         <AppManager currentState={this.props.currentState} {...this.props} />

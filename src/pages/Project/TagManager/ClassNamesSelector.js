@@ -12,7 +12,7 @@ import DropDownMenuSelect from 'react-nested-menu-selector'
 // )
 
 const options = {
-    placeholder: "Class",
+    placeholder: "Class menu: ",
     options: classNames.classBranches.map(branch => ({
         label: branch.name,
         options: branch.classNames.map(className => ({
@@ -29,7 +29,7 @@ const ClassNamesSelector = ({ value = '', onChange, ...props }) => {
     const _delete = cls => onChange(deconstructed.filter(i => i !== cls).join(' '))
     const onClick = newValue => onChange(value + ' ' + newValue)
     return (
-        <div className={`d-flex align-center`}>
+        <div className={`d-flex align-center pointer`}>
             <DropDownMenuSelect
                 values={options}
                 handleOnClick={onClick}
@@ -38,13 +38,16 @@ const ClassNamesSelector = ({ value = '', onChange, ...props }) => {
           {/*<select onChange={evt => onChange(value + ' ' + evt.target.value)} className={`mr-20`}>*/}
           {/*  {selectGroups}*/}
           {/*</select>*/}
-          {value && deconstructed.map(cls =>
-              (
-                  <div className={`mr-5 flex align-center text-no-wrap`} key={cls}>
-                      .{cls}
-                      <FaRegWindowClose onClick={() => _delete(cls)} size={20} style={{marginLeft: 3}}/>
-                  </div>
-              ))}
+            <div className={`w-100-p flex flex-wrap max-h-100 flex-column align-flex-start`}>
+                  {value && deconstructed.map(cls =>
+                      (
+                          <div className={`mr-5 flex align-center text-no-wrap`} key={cls}>
+                              <FaRegWindowClose onClick={() => _delete(cls)} size={14} className={`mr-5`}/>
+                              .{cls}
+                          </div>
+                        )
+                  )}
+            </div>
         </div>
     )
 }

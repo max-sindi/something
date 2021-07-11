@@ -4,13 +4,17 @@ import _ from "lodash";
 import {TagWrapper} from "./TagManager/styled";
 import * as aiIcons from "react-icons/ai";
 import {AiOutlineCodeSandbox, AiOutlineFileAdd} from "react-icons/ai";
-import {FaAngleRight, FaEquals} from "react-icons/fa";
+import {FaAngleRight, FaEquals, FaRegWindowClose} from "react-icons/fa"
 import * as gameIcons from "react-icons/go";
 import {RiEditLine} from "react-icons/ri";
 import * as githubIcons from "react-icons/gi";
 import {MdArrowDownward, MdArrowUpward} from "react-icons/md";
 import ClassNamesSelector from "./TagManager/ClassNamesSelector";
 import ObjectEditor from "./TagManager/ObjectEditor"
+import {generateColor, transparentColor} from '../../utils'
+import SVGBlockToText from '../../components/svg/BlockToText'
+import Tooltip from 'rc-tooltip'
+import {closePopup} from './hook/popup'
 
 class EachTagManager extends React.Component {
     state = {
@@ -126,11 +130,12 @@ class EachTagManager extends React.Component {
           ))}
       </select>
     )
+
     recursiveRenderChildren = () => (
       this.state.isOpened
       &&
       this.props.fragment.children.map((child, index, arr) =>
-        <div key={index} className={`mt-5 w-100-percent`}>
+        <div key={index} className={`mt-5 w-100-p`}>
             {!_.isObject(child) ? child : (
               <EachTagManager
                 {...this.props}
@@ -155,49 +160,85 @@ class EachTagManager extends React.Component {
         }
     ]
 
+    componentDidMount() {
+        console.log('Mounted')
+    }
 
     render() {
         if(_.isNull(this.props.fragment)) return null
-        const {deepLevel, indexInLevel, first, lastInLevel, fragment} = this.props
+        const {deepLevel, indexInLevel, first, lastInLevel, fragment, popup, setPopup} = this.props
         const {isOpened} = this.state
         const isObject = _.isObject(fragment)
+        const color = "#fff"
+
+        if(popup.fragment !== fragment) {
+            return this.recursiveRenderChildren()
+        }
 
         return (
-          <TagWrapper isOpened={isOpened} deepLevel={deepLevel} indexInLevel={indexInLevel} {...this.props}>
-              <div className={`flex align-center w-100-p`}>
+          <TagWrapper isOpened={isOpened} deepLevel={deepLevel} indexInLevel={indexInLevel} popup={popup} {...this.props}>
+              <div className={`relative flex flex-wrap align-center w-100-p pr-10`}>
+
+                  <div className={`w-100-p pl-5 pb-10`}>
+                      Deep index: {deepLevel}.
+                      Level index: {indexInLevel}. <br/>
+                      _______________________________________
+                  </div>
+
+                  {/* Close Popup */}
+                  <FaRegWindowClose onClick={() => closePopup(setPopup)} size={20} className={`pointer absolute r-3 t-3 z-index-5`}/>
+
+
+                  {/* Toggle expand */}
                   {isOpened
                     ? <aiIcons.AiOutlineMinusSquare onClick={this.toggleVisibility} size={15}/>
                     : <aiIcons.AiOutlinePlusSquare onClick={this.toggleVisibility} size={15}/>
                   }
-                  {!first && isObject && <span className={`pl-5`}>Tag: {this.rendererTagSelect()}</span>}
-                  {/*</div>*/}
 
-                  {first && isObject && this.recursiveRenderChildren()}
+                  {/* Tag */}
+                  <div className={`flex align-center`}>{!first && isObject &&
+                    <>
+                        <div className={`mr-5 ml-5`}>Tag:</div>
+                        {this.rendererTagSelect()}
+                    </>
+                  }</div>
 
-                  {/*<div className={`d-flex align-flex-end`}>*/}
-                  {/* object elements */}
+
+                  {/* Object elements */}
                   {!first && isObject && (
                     <>
-                        <div className={`flex align-center mt-10 pointer`} onClick={this.makeItText} title={'Make it text'}>
-                            <AiOutlineCodeSandbox size={15} />
-                            <FaEquals size={15} />
-                            <FaAngleRight size={15} className={'mr-5-minus'} />
-                            <gameIcons.GoTextSize size={15} className={`ml-5`} />
+                        {/* Make text */}
+                        <Tooltip overlay={'Make it text'} placement={`top`}>
+                            <SVGBlockToText onClick={this.makeItText} color={'#fff'} className={'pointer ml-15'} title={"Make it text"}/>
+                        </Tooltip>
+
+                        <div className="w-100-p flex align-center mt-5">
+                            Name:
+                            <textarea value={fragment.name || ''} onChange={this.onNameChange} rows={1} className={`grow-1 ml-5`}/>
                         </div>
-                        <div className="mr-20 ml-20">Name: </div>
-                        <textarea value={fragment.name || ''} onChange={this.onNameChange} className={`mr-20`}/>
 
-                        <label className={'flex align-flex-end mr-10'} >
+
+                        <label className={'flex align-flex-end w-100-p mt-5 mb-5'} >
                             {/*<RiPaintBrushLine size={30} className={'mr-5'} />*/}
-                            <span className={`mr-10`}>ClassName: </span>
-                            <textarea value={fragment.className} onChange={this.changeClassName} className={`grow-1 w-200`} />
+                            <span className={`mr-10`}>Class: </span>
+                            <textarea value={fragment.className} onChange={this.changeClassName} rows={1} className={`grow-1 w-200`} />
                         </label>
-                        <div className="mr-20">Attrs: </div>
-                        <textarea value={fragment.attrs || ''} onChange={this.onAttrsChange} className={`w-200 mr-20`}/>
-                        <AiOutlineFileAdd size={15} onClick={this.addNewChild} title={'Add child +'} />
+                        <div className={`w-100-p flex align-center`}>
+                            <div className="mr-15">Attrs: </div>
+                            <textarea value={fragment.attrs || ''} onChange={this.onAttrsChange} className={`w-200 grow-1`} rows={1}/>
+                        </div>
+                        _____________________________________________
 
-                        <div className={`pointer`} onClick={this.duplicateNode}>
-                          1 + 1
+                        <div className={`flex align-center h-40`}>
+                            <Tooltip placement={`top`} overlay={'Add Child'}>
+                                <AiOutlineFileAdd size={25} onClick={this.addNewChild} title={'Add child +'} className={`mr-10`} />
+                            </Tooltip>
+
+                            <Tooltip placement={`top`} overlay={`Duplicate`}>
+                                <div className={`pointer`} onClick={this.duplicateNode}>
+                                  1 + 1
+                                </div>
+                            </Tooltip>
                         </div>
                     </>
                   )}
@@ -205,57 +246,60 @@ class EachTagManager extends React.Component {
                   {/* text elements */}
                   {!first && !isObject && (
                     <>
-                        <div className="inline-flex flex-center mt-10 pointer" title={'Make it div'} onClick={this.makeItDiv}>
-                            <gameIcons.GoTextSize size={15} />
-                            <FaEquals size={17} className={'mr-5-minus'} />
-                            <FaAngleRight size={15}/>
-                            <AiOutlineCodeSandbox size={15}/>
-                        </div>
-
-                        <label className={`flex align-center pb-10 pt-10 `} >
-                            <RiEditLine size={15} className={'cursor-default mr-10'}/>
-                            <textarea type="text" value={fragment} onChange={this.changeText} className={`grow-1`}/>
-                        </label>
-
+                        {/* Make it div */}
+                        <SVGBlockToText onClick={this.makeItDiv} className={`pointer`} style={{ transform: 'scaleX(-1' }} />
                     </>
                   )}
 
 
                   {/* general actions */}
                   {!first && (
-                    <>
-                        <githubIcons.GiTrashCan size={23} onClick={this.deleteElement} title={'Delete'}>x</githubIcons.GiTrashCan>
-                        <img
-                          src={process.env.PUBLIC_URL + 'wrap.svg'}
-                          title={'Wrap with div'}
-                          onClick={this.wrapWithDiv}
-                          className={"pointer"}
-                        />
+                    <div className={`flex align-center h-40`}>
+                        {/* Delete */}
+                        <githubIcons.GiTrashCan onClick={this.deleteElement} title={'Delete'} size={23} className={`ml-5 mr-5`}>x</githubIcons.GiTrashCan>
+                        {/* Wrap with div */}
+                        <Tooltip overlay={'Wrap with div'} placement={`top`}>
+                            <img
+                              src={process.env.PUBLIC_URL + '/wrap-with-div.svg'}
+                              title={'Wrap with div'}
+                              onClick={this.wrapWithDiv}
+                              className={"pointer mr-5 ml-5"}
+                            />
+                        </Tooltip>
+                        {/* Move upward in level */}
                         {indexInLevel > 0 && (
-                          <MdArrowUpward onClick={this.moveUpward} title={`Move Upward`}/>
+                          <Tooltip overlay={`Move Upward`} placement={`top`}>
+                            <MdArrowUpward onClick={this.moveUpward} title={`Move Upward`} size={25}/>
+                          </Tooltip>
                         )}
+                        {/* Move downward in level */}
                         {lastInLevel === false && (
-                          <MdArrowDownward onClick={this.moveDownward} title={`Move Downward`}/>
+                          <Tooltip overlay={`Move Downward`} placement={`top`}>
+                            <MdArrowDownward onClick={this.moveDownward} title={`Move Downward`} size={25}/>
+                          </Tooltip>
                         )}
-                    </>
+                    </div>
                   )}
-
               </div>
+              _______________________________________________
               {!first && isObject && (
                 <>
                     <div className={`pt-5 pb-5 mt-10`}>
-                        // classes
-                        <ClassNamesSelector onChange={this.changeClassNamesList} value={fragment.className}/>
-                        // styles
+                        <div>
+                            <ClassNamesSelector onChange={this.changeClassNamesList} value={fragment.className}/>
+                        </div>
                         <ObjectEditor
                           onChange={this.createFieldUpdater('style')}
                           value={fragment.style}
                           fields={this.stylesExisting}
+                          title={'Styles: '}
                         />
                         {this.recursiveRenderChildren()}
                     </div>
                 </>
               )}
+              {/* Children  */}
+              {first && isObject && this.recursiveRenderChildren()}
 
           </TagWrapper>
         )

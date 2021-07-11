@@ -1,9 +1,11 @@
-export const generateColor = (a = 1, b = 1, c = 1) => {
-  // const args = [a, b, c]
+import colorAlpha from 'color-alpha'
+
+export const generateColor = (deepLevel = 1, indexInLevel = 1, c = 1) => {
+  // const args = [a, b, c],
   // console.log(['#0E292A', '#29547A', '#1D584F', '#172845', '#7A292A', '#541C34', '#1B504F'][a])
   return ['#0E292A', '#29547A', '#1D584F', '#172845', '#7A292A', '#541C34', '#1B504F', '#BF75D1', '#C75798',
     '#A1365F', '#7A2941', '#4D192C'
-  ][a]
+  ][deepLevel]
   // return `rgba(${  color()  })`
 
   // function color() {
@@ -17,3 +19,6 @@ export const generateColor = (a = 1, b = 1, c = 1) => {
   //     .join(', ')
   // }
 }
+
+// export const transparentColor = (color, transparency = '99') => '#' + color.split('#').join(transparency)
+export const transparentColor = (color) => colorAlpha(color, .9)

@@ -31,7 +31,7 @@ export default class CssUnitClassBranch {
         this.units = [
             px && new Unit({ unit: 'px', limit: eachValueLimit, step: 1, classBranch: this, minus }),
             px && new Unit({ unit: 'px', limit: each5ValuesLimit, step: 5, classBranch: this, minus }),
-            percent && new Unit({ unit: "%", prefix: "percent", limit: percent, step: 5, classBranch: this, minus }),
+            percent && new Unit({ unit: "%", prefix: "p", limit: percent, step: 5, classBranch: this, minus }),
             percent && new Unit({ unit: "vh", prefix: "vh", limit: vh, step: 5, classBranch: this, minus: false }),
         ].filter(Boolean)
 

@@ -19,10 +19,10 @@ const classNames = [
     new CssUnitClassBranch({ className: "mr",          property: "margin-right",    media: true,  percent:      200,    each5ValuesLimit: 200,  px: true, minus: true}),
     new CssUnitClassBranch({ className: "mt",          property: "margin-top",      media: true,  percent:      200,    each5ValuesLimit: 200,  px: true, minus: true}),
     new CssUnitClassBranch({ className: "mb",          property: "margin-bottom",   media: true,  percent:      200,    each5ValuesLimit: 200,  px: true, minus: true}),
-    new CssUnitClassBranch({ className: "l",           property: "left",            media: true,  percent:      200,    each5ValuesLimit: 200,  px: true, minus: true}),
-    new CssUnitClassBranch({ className: "r",           property: "right",           media: true,  percent:      200,    each5ValuesLimit: 200,  px: true, minus: true}),
-    new CssUnitClassBranch({ className: "t",           property: "top",             media: true,  percent:      200,    each5ValuesLimit: 200,  px: true, minus: true}),
-    new CssUnitClassBranch({ className: "b",           property: "bottom",          media: true,  percent:      200,    each5ValuesLimit: 200,  px: true, minus: true}),
+    new CssUnitClassBranch({ className: "l",           property: "left",            media: true,  percent:      200,    each5ValuesLimit: 200, eachValueLimit: 15,  px: true, minus: true}),
+    new CssUnitClassBranch({ className: "r",           property: "right",           media: true,  percent:      200,    each5ValuesLimit: 200, eachValueLimit: 15,  px: true, minus: true}),
+    new CssUnitClassBranch({ className: "t",           property: "top",             media: true,  percent:      200,    each5ValuesLimit: 200, eachValueLimit: 15,  px: true, minus: true}),
+    new CssUnitClassBranch({ className: "b",           property: "bottom",          media: true,  percent:      200,    each5ValuesLimit: 200, eachValueLimit: 15,  px: true, minus: true}),
     new CssUnitClassBranch({ className: "fz",          property: "font-size",       media: true,  percent:      200,    eachValueLimit: 50,     px: true}),
     new CssUnitClassBranch({ className: "border-radius", property: "border-radius",                                     eachValueLimit: 10,     px: true}),
     new CssUnitClassBranch({ className: "z-index",     property: "z-index",         media: true,                        eachValueLimit: 40,     minus: true }),
@@ -77,6 +77,10 @@ const classNames = [
     new CssSimpleClassBranch({ className: "text-no-wrap",    fast: "white-space: nowrap", media: true }),
     new CssSimpleClassBranch({ className: "bold",        fast: "font-weight: 700" }),
     new CssSimpleClassBranch({ className: "pointer",        fast: "cursor: pointer" }),
+    ...[
+        { className: "flex-column", fast: "flex-direction: column" }
+    ].map(config => new CssSimpleClassBranch(config)),
+
     // new CssSimpleClassBranch({ className: "fw-bold",     fast: "font-weight: 700" }),
     // new CssSimpleClassBranch({ className: "ls-027",      fast: "letter-spacing: 0.27px" }),
     // new CssSimpleClassBranch({ className: "ls-05",       fast: "letter-spacing: 0.54px" }),
