@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 // import Dropzone from "../../../components/Dropzone"
-import {observer} from "mobx-react"
-import project from "../../mobX/project"
-import popup from '../../mobX/popup'
+// import {observer} from "mobx-react"
+// import project from "../../mobX/project"
+// import popup from '../../mobX/popup'
 
 
 class AppManager extends React.Component {

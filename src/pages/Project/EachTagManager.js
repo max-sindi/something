@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import _ from "lodash";
+import _, {setWith} from "lodash"
 import {TagWrapper} from "./TagManager/styled";
 import * as aiIcons from "react-icons/ai";
 import {AiOutlineCodeSandbox, AiOutlineFileAdd} from "react-icons/ai";
@@ -15,6 +15,7 @@ import {generateColor, transparentColor} from '../../utils'
 import SVGBlockToText from '../../components/svg/BlockToText'
 import Tooltip from 'rc-tooltip'
 import {closePopup} from './hook/popup'
+import { v4 as uuid } from 'uuid'
 
 class EachTagManager extends React.Component {
     state = {
@@ -38,32 +39,22 @@ class EachTagManager extends React.Component {
     //   return `${this.props.parentXpath}.children[${this.props.indexInLevel}]`
     // }
     toggleVisibility = () => this.setState(state => ({ isOpened: !state.isOpened }))
-    addNewChild = async () => {
-        const {currentState, save, deepLevel, indexInLevel, parentXpath, xpath} = this.props
-        const {template} = currentState
+    addNewChild = async (creator = () => this.createDiv({children: ['']})) => {
+        const {xpath} = this.props
         const clonedTemplate = this.createClone()
-        let elem = _.get(clonedTemplate, xpath);
-
-        // console.log('template', template)
-        // console.log('deepLevel', deepLevel)
-        // console.log('indexInLevel', indexInLevel)
-        // console.log('parentXpath', parentXpath)
-        // console.log('xpath', this.props.xpath)
-        // console.log('elem',elem)
+        let elem = _.get(clonedTemplate, xpath)
 
         if(!elem) {
             console.warn('no element found, ref to alpha')
             elem = clonedTemplate
         }
 
-        elem.children.push(this.createDiv({children: ['']}))
-        // console.log('clonedTemplate after mutation', clonedTemplate)
+        elem.children.push(creator())
         this.save(clonedTemplate)
     }
 
     transformParent = (transformer) => this.transform(transformer, this.props.parentXpath)
     save = newState => this.props.save({...this.props.currentState, template: newState})
-    createClone = () => _.cloneDeep(this.props.currentState.template)
     deleteElement = () => this.transformParent(parent => ({...parent, children: parent.children.filter((i, index) => index !== this.props.indexInLevel)}))
     makeItText = () => this.transform('')
     makeItDiv = () => this.transform(this.createDiv)
@@ -86,32 +77,27 @@ class EachTagManager extends React.Component {
     createDiv = ({children = []} = {}) => ({
         children,
         tag: 'div',
-        className: '_debug__newly_added',
+        className: '',
         name: '',
-        attrs: '{}'
+        attrs: '{}',
+        id: uuid()
     })
     duplicateNode = () => this.transformParent(parent => ({
         ...parent,
-        children: [...parent.children, _.cloneDeep(parent.children[this.props.indexInLevel])]
+        children: [...parent.children, {..._.cloneDeep(parent.children[this.props.indexInLevel]), id: uuid()}]
     }))
     createFieldUpdater = (path) => value => this.transform(old => ({ ...old, [path]: value }))
-    // updater passes to lodash.updateWith 3d arg and mutates current node
+    createClone = () => _.cloneDeep(this.props.currentState.template)
     transform = (updater, xpath = this.props.xpath) => {
-        // @todo continue
-        const clone = this.createClone()
         const firstTwoArgs = [
-            xpath ? clone : { value: clone },
+            xpath ? this.props.currentState.template : { value: this.props.currentState.template },
             xpath || 'value'
         ]
 
-        // @todo refactor with "? :" in 3rd argument
-        if(_.isFunction(updater)) {
-            _.updateWith(...firstTwoArgs, updater)
-        } else {
-            _.updateWith(...firstTwoArgs, () => updater)
-        }
+        const newValue = _.isFunction(updater) ? updater(_.get(this.props.currentState.template, xpath)) : updater
+        _.setWith(...firstTwoArgs, newValue, undefined)
 
-        this.save(clone)
+        this.save(this.props.currentState.template)
     }
 
     tags = ['div', 'span', 'input', 'img', 'a', 'button']
@@ -136,19 +122,17 @@ class EachTagManager extends React.Component {
       &&
       this.props.fragment.children.map((child, index, arr) =>
         <div key={index} className={`mt-5 w-100-p`}>
-            {!_.isObject(child) ? child : (
-              <EachTagManager
-                {...this.props}
-                first={false}
-                fragment={child}
-                key={index}
-                deepLevel={this.props.deepLevel + 1}
-                indexInLevel={index}
-                parentXpath={this.props.xpath}
-                lastInLevel={index === arr.length - 1}
-                xpath={`${this.props.xpath}${this.props.xpath ? '.' : ''}children[${index}]`}
-              />
-            )}
+            <EachTagManager
+              {...this.props}
+              first={false}
+              fragment={child}
+              key={String(this.props.deepLevel) + String(this.props.indexInLevel)}
+              deepLevel={this.props.deepLevel + 1}
+              indexInLevel={index}
+              parentXpath={this.props.xpath}
+              lastInLevel={index === arr.length - 1}
+              xpath={`${this.props.xpath}${this.props.xpath ? '.' : ''}children[${index}]`}
+            />
         </div>
       )
     )
@@ -160,20 +144,11 @@ class EachTagManager extends React.Component {
         }
     ]
 
-    componentDidMount() {
-        console.log('Mounted')
-    }
-
     render() {
         if(_.isNull(this.props.fragment)) return null
         const {deepLevel, indexInLevel, first, lastInLevel, fragment, popup, setPopup} = this.props
         const {isOpened} = this.state
         const isObject = _.isObject(fragment)
-        const color = "#fff"
-
-        if(popup.fragment !== fragment) {
-            return this.recursiveRenderChildren()
-        }
 
         return (
           <TagWrapper isOpened={isOpened} deepLevel={deepLevel} indexInLevel={indexInLevel} popup={popup} {...this.props}>
@@ -219,7 +194,6 @@ class EachTagManager extends React.Component {
 
 
                         <label className={'flex align-flex-end w-100-p mt-5 mb-5'} >
-                            {/*<RiPaintBrushLine size={30} className={'mr-5'} />*/}
                             <span className={`mr-10`}>Class: </span>
                             <textarea value={fragment.className} onChange={this.changeClassName} rows={1} className={`grow-1 w-200`} />
                         </label>
@@ -229,13 +203,16 @@ class EachTagManager extends React.Component {
                         </div>
                         _____________________________________________
 
-                        <div className={`flex align-center h-40`}>
-                            <Tooltip placement={`top`} overlay={'Add Child'}>
-                                <AiOutlineFileAdd size={25} onClick={this.addNewChild} title={'Add child +'} className={`mr-10`} />
+                        <div className={`flex align-flex-end h-40`}>
+                            <Tooltip placement={`top`} overlay={'Add block'}>
+                                <AiOutlineFileAdd size={22} onClick={() => this.addNewChild()} title={'Add block +'} className={`mr-10 pointer`} style={{ marginBottom: 2 }} />
+                            </Tooltip>
+                            <Tooltip placement={`top`} overlay={'Add text'}>
+                                <div onClick={() => this.addNewChild(() => '')} title={'Add text +'} className={`mr-10 pointer`} style={{ marginBottom: 2 }} >A</div>
                             </Tooltip>
 
                             <Tooltip placement={`top`} overlay={`Duplicate`}>
-                                <div className={`pointer`} onClick={this.duplicateNode}>
+                                <div className={`pointer fz-20`} onClick={this.duplicateNode} style={{ marginBottom: -3 }}>
                                   1 + 1
                                 </div>
                             </Tooltip>
@@ -247,23 +224,24 @@ class EachTagManager extends React.Component {
                   {!first && !isObject && (
                     <>
                         {/* Make it div */}
-                        <SVGBlockToText onClick={this.makeItDiv} className={`pointer`} style={{ transform: 'scaleX(-1' }} />
+                        <SVGBlockToText onClick={this.makeItDiv} className={`pointer mr-10 ml-10`} style={{ transform: 'scaleX(-1' }} color={'#fff'} />
+                        <textarea className={`h-60`} rows="1" value={fragment} onChange={this.changeText} />
                     </>
                   )}
 
 
                   {/* general actions */}
                   {!first && (
-                    <div className={`flex align-center h-40`}>
+                    <div className={`flex align-flex-end h-40`}>
                         {/* Delete */}
-                        <githubIcons.GiTrashCan onClick={this.deleteElement} title={'Delete'} size={23} className={`ml-5 mr-5`}>x</githubIcons.GiTrashCan>
+                        <githubIcons.GiTrashCan onClick={this.deleteElement} title={'Delete'} size={23} className={`ml-5 mr-5`} style={{ marginBottom: 3 }}>x</githubIcons.GiTrashCan>
                         {/* Wrap with div */}
                         <Tooltip overlay={'Wrap with div'} placement={`top`}>
                             <img
                               src={process.env.PUBLIC_URL + '/wrap-with-div.svg'}
                               title={'Wrap with div'}
                               onClick={this.wrapWithDiv}
-                              className={"pointer mr-5 ml-5"}
+                              className={"pointer mr-5 ml-5 w-25 h-25"}
                             />
                         </Tooltip>
                         {/* Move upward in level */}
@@ -294,10 +272,14 @@ class EachTagManager extends React.Component {
                           fields={this.stylesExisting}
                           title={'Styles: '}
                         />
-                        {this.recursiveRenderChildren()}
+                        <div className={`flex `}>
+                            <div className={`fz-17 mr-20 pt-5 bold`}>Content: </div>
+                            {this.recursiveRenderChildren()}
+                        </div>
                     </div>
                 </>
               )}
+
               {/* Children  */}
               {first && isObject && this.recursiveRenderChildren()}
 

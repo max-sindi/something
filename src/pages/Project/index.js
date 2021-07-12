@@ -149,7 +149,7 @@ const Project = observer(
               {currentState && <RenderState currentState={currentState}/>}
 
               {/* tools */}
-              {currentState && <Manager save={this.updateState} currentState={currentState} />}
+              {<Manager save={this.updateState} currentState={currentState} />}
 
               {/*<button onClick={this.saveState} className={`fixed t-60 r-40`}>*/}
               {/*  Save*/}

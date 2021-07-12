@@ -10,8 +10,8 @@ const SVGBlockToText = ({ color = '#7D1ADF', ...props}) => {
             fill={color}/>
       <path d="M63.9771 16.8535H57.7222L56.3174 20.75H54.2871L59.9883 5.82031H61.7109L67.4224 20.75H65.4023L63.9771 16.8535ZM58.3169 15.2334H63.3926L60.8496 8.25049L58.3169 15.2334Z" fill={color}/>
       <defs>
-        <filter id="filter0_d" x="0" y="3" width="20" height="20" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-          <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+        <filter id="filter0_d" x="0" y="3" width="20" height="20" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+          <feFlood floodOpacity="0" result="BackgroundImageFix"/>
           <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
           <feMorphology radius="1" operator="dilate" in="SourceAlpha" result="effect1_dropShadow"/>
           <feOffset/>

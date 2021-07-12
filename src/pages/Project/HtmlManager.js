@@ -1,23 +1,23 @@
 import React from "react"
-import PropTypes from "prop-types"
 import _ from "lodash"
 import EachTagManager from './EachTagManager'
-import {ButtonExtendComponent, ButtonAddNewChild} from '../../lib/ObjectExplorer'
-import {TagWrapper} from './TagManager/styled'
-import * as githubIcons from 'react-icons/gi'
-import * as gameIcons from 'react-icons/go'
-import * as aiIcons from 'react-icons/ai'
-import {FaAngleLeft, FaAngleRight, FaEquals, FaRegShareSquare} from 'react-icons/fa'
-import {AiOutlineFileAdd} from 'react-icons/ai'
-import {AiFillCodeSandboxSquare} from 'react-icons/ai'
+// import {ButtonExtendComponent, ButtonAddNewChild} from '../../lib/ObjectExplorer'
+// import {TagWrapper} from './TagManager/styled'
+// import * as githubIcons from 'react-icons/gi'
+// import * as gameIcons from 'react-icons/go'
+// import * as aiIcons from 'react-icons/ai'
+// import {FaAngleLeft, FaAngleRight, FaEquals, FaRegShareSquare} from 'react-icons/fa'
+// import {AiOutlineFileAdd} from 'react-icons/ai'
+// import {AiFillCodeSandboxSquare} from 'react-icons/ai'
 // import {FaEquals, IconContext} from 'react-icons'
-import {TiArrowForward} from 'react-icons/ti'
-import {AiOutlineCodeSandbox} from 'react-icons/ai'
-import {RiEditLine, RiPaintBrushLine} from 'react-icons/ri'
-import {MdArrowDownward, MdArrowUpward} from 'react-icons/md'
-import ClassNamesSelector from './TagManager/ClassNamesSelector'
+// import {TiArrowForward} from 'react-icons/ti'
+// import {AiOutlineCodeSandbox} from 'react-icons/ai'
+// import {RiEditLine, RiPaintBrushLine} from 'react-icons/ri'
+// import {MdArrowDownward, MdArrowUpward} from 'react-icons/md'
+// import ClassNamesSelector from './TagManager/ClassNamesSelector'
 import {useRecoilState} from 'recoil'
 import {popupState} from './hook/popup'
+import {proxy, ref} from 'valtio'
 
 // import subscriber from '../subscriber'
 // import ReactSelect from 'react-select'
@@ -52,13 +52,17 @@ const expandedLog = (function(){
   }
 })();
 
+const state = proxy({})
+
 
 const HtmlManager = props => {
   const template = _.get(props.currentState, 'template')
   const [popup, setPopup] = useRecoilState(popupState)
 
+  if(!template) return null
+
   return (
-    <div className={"html-manager"}>
+    <div className={"html-manager min-h-600"}>
       {/*<h4 className={`mb-20`}>HTML manager </h4>*/}
       {/*{template.map((fragment, index) =>*/}
       <EachTagManager

@@ -1,5 +1,6 @@
 import {makeAutoObservable} from 'mobx'
 import driver from './services/driver'
+import _ from 'lodash'
 
 class Project {
     data = null
@@ -16,7 +17,8 @@ class Project {
     }
 
     update(data: any) {
-        driver.project.update(data).then(this.fetchState)
+        this.data = data
+        driver.project.update(data).then(_.noop)
     }
 
     loadAsset(asset: any) {

@@ -21,13 +21,14 @@ export const TagWrapperStyled = styled.div`
   border-radius: 14px;
   color: #cccccc;
   ${({ popup, fragment }) => {
-    return popup.fragment === fragment ? 
-            `position: fixed; 
-            top: ${popup.coords.top}px; 
+    return _.get(popup, 'fragment.id', true) === _.get(fragment, 'id', false) ? 
+            `position: absolute; 
+            top: ${popup.coords.top}px;
             left: ${popup.coords.left}px
             width: 400px;
             overflow: auto;
-            ` : 
+            // max-height: 300px;
+            ` :
             ''
   }}
   
@@ -58,10 +59,12 @@ export const TagWrapper = props => {
   // console.log(popup.domElement)
   // React.useState(() => console.log('Mounted'), [])
   return (
-    <IconContext.Provider value={{className: 'pointer', color: '#cccccc', size: 17}}>
-      <TagWrapperStyled {...props} popup={popup} onMouseDown={() => console.log(123123)}>
+    <div className={`position w-100-p h-100-p t-0 r-0`}>
+      <IconContext.Provider value={{className: 'pointer', color: '#cccccc', size: 17}}>
+        <TagWrapperStyled {...props} popup={popup} onMouseDown={() => console.log(123123)}>
 
-      </TagWrapperStyled>
-    </IconContext.Provider>
+        </TagWrapperStyled>
+      </IconContext.Provider>
+    </div>
   )
 }
