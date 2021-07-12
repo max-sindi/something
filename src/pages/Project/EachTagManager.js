@@ -79,7 +79,7 @@ class EachTagManager extends React.Component {
         tag: 'div',
         className: '',
         name: '',
-        attrs: '{}',
+        attrs: {},
         id: uuid()
     })
     duplicateNode = () => this.transformParent(parent => ({
@@ -144,6 +144,17 @@ class EachTagManager extends React.Component {
         }
     ]
 
+    attrsExisting = [
+        {
+            name: 'src',
+            fileSelectable: true,
+            fileValueCreator: fileName => `http://localhost:8000${fileName}`
+        },
+        {
+            name: 'title',
+        },
+    ]
+
     render() {
         if(_.isNull(this.props.fragment)) return null
         const {deepLevel, indexInLevel, first, lastInLevel, fragment, popup, setPopup} = this.props
@@ -197,10 +208,10 @@ class EachTagManager extends React.Component {
                             <span className={`mr-10`}>Class: </span>
                             <textarea value={fragment.className} onChange={this.changeClassName} rows={1} className={`grow-1 w-200`} />
                         </label>
-                        <div className={`w-100-p flex align-center`}>
-                            <div className="mr-15">Attrs: </div>
-                            <textarea value={fragment.attrs || ''} onChange={this.onAttrsChange} className={`w-200 grow-1`} rows={1}/>
-                        </div>
+                        {/*<div className={`w-100-p flex align-center`}>*/}
+                        {/*    <div className="mr-15">Attrs: </div>*/}
+                        {/*    <textarea value={fragment.attrs || ''} onChange={this.onAttrsChange} className={`w-200 grow-1`} rows={1}/>*/}
+                        {/*</div>*/}
                         _____________________________________________
 
                         <div className={`flex align-flex-end h-40`}>
@@ -272,6 +283,13 @@ class EachTagManager extends React.Component {
                           fields={this.stylesExisting}
                           title={'Styles: '}
                         />
+                        <ObjectEditor
+                          onChange={this.createFieldUpdater('attrs')}
+                          value={fragment.attrs}
+                          fields={this.attrsExisting}
+                          title={'Attri-butes: '}
+                        />
+                        <div className={`w-100-p`}>______________________________</div>
                         <div className={`flex `}>
                             <div className={`fz-17 mr-20 pt-5 bold`}>Content: </div>
                             {this.recursiveRenderChildren()}
