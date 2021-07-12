@@ -27,7 +27,7 @@ export const TagWrapperStyled = styled.div`
             left: ${popup.coords.left}px
             width: 400px;
             overflow: auto;
-            // max-height: 300px;
+            max-height: 600px;
             ` :
             ''
   }}

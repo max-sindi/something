@@ -60,8 +60,9 @@ class EachTagManager extends React.Component {
     makeItDiv = () => this.transform(this.createDiv)
     changeText = (evt) => this.transform(evt.target.value)
     changeClassName = evt => this.transform((val) => ({...val, className: evt.target.value}))
-    changeClassNamesList = className => this.transform(val => Object.assign(val, {className}))
+    changeClassNamesList = className => this.transform(val => ({...val, className}))
     wrapWithDiv = () => this.transform(val => ({...this.createDiv(), children: [...this.createDiv().children, val]}))
+    wrapChildren = () => this.transform(val => ({...val, children: [this.createDiv({ children: this.props.fragment.children })]}))
     moveUpward = () => this.swapElements(this.props.indexInLevel - 1, this.props.indexInLevel)
     moveDownward = () => this.swapElements(this.props.indexInLevel, this.props.indexInLevel + 1 )
     swapElements = (firstIndex, secondIndex) => this.transformParent(parent => {
@@ -102,6 +103,9 @@ class EachTagManager extends React.Component {
 
     tags = ['div', 'span', 'input', 'img', 'a', 'button']
     onTagSelect = ({target: {value: tag}}) => this.transform(node => ({ ...node, tag }))
+    onParentClick = () => this.props.setPopup(old => ({ ...old, fragment: _.get(this.props.currentState.template, this.props.parentXpath)}))
+    onFocusInspectClick = () => this.props.setPopup(old => ({ ...old, fragment: this.props.fragment}))
+    onHightlight = () => this.props.setPopup(old => ({ ...old, highlightFragment: this.props.fragment}))
     // renderTagSelect = () => (
     //     <select value={this.props.fragment.tag} onChange={this.onTagSelect}>
     //         {this.tags.map(tag => (
@@ -157,7 +161,7 @@ class EachTagManager extends React.Component {
 
     render() {
         if(_.isNull(this.props.fragment)) return null
-        const {deepLevel, indexInLevel, first, lastInLevel, fragment, popup, setPopup} = this.props
+        const {deepLevel, indexInLevel, first, lastInLevel, fragment, popup, setPopup, parentXpath} = this.props
         const {isOpened} = this.state
         const isObject = _.isObject(fragment)
 
@@ -165,10 +169,12 @@ class EachTagManager extends React.Component {
           <TagWrapper isOpened={isOpened} deepLevel={deepLevel} indexInLevel={indexInLevel} popup={popup} {...this.props}>
               <div className={`relative flex flex-wrap align-center w-100-p pr-10`}>
 
-                  <div className={`w-100-p pl-5 pb-10`}>
-                      Deep index: {deepLevel}.
-                      Level index: {indexInLevel}. <br/>
-                      _______________________________________
+                  <div className={`flex align-center w-100-p pl-5 pb-10`}>
+                      <div>Deep index: {deepLevel}.</div>
+                      <div>Level index: {indexInLevel}.</div>
+                      {parentXpath && <button className={`ml-20 black pointer fz-13`} onClick={this.onParentClick}>Parent</button>}
+                      <button className={`ml-20 black pointer fz-13`} onClick={this.onFocusInspectClick}>Focus</button>
+                      <button className={`ml-20 black pointer fz-13`} onClick={this.onHightlight}>Hightlight</button>
                   </div>
 
                   {/* Close Popup */}
@@ -215,17 +221,19 @@ class EachTagManager extends React.Component {
                         _____________________________________________
 
                         <div className={`flex align-flex-end h-40`}>
-                            <Tooltip placement={`top`} overlay={'Add block'}>
+                            <Tooltip overlay={'Add block'} placement={`top`}>
                                 <AiOutlineFileAdd size={22} onClick={() => this.addNewChild()} title={'Add block +'} className={`mr-10 pointer`} style={{ marginBottom: 2 }} />
                             </Tooltip>
-                            <Tooltip placement={`top`} overlay={'Add text'}>
-                                <div onClick={() => this.addNewChild(() => '')} title={'Add text +'} className={`mr-10 pointer`} style={{ marginBottom: 2 }} >A</div>
+                            <Tooltip overlay={'Add text'} placement={`top`}>
+                                <div onClick={() => this.addNewChild(() => '')} title={'Add text +'} className={`mr-10 pointer`} style={{ marginBottom: 2 }} >+ A</div>
                             </Tooltip>
 
-                            <Tooltip placement={`top`} overlay={`Duplicate`}>
-                                <div className={`pointer fz-20`} onClick={this.duplicateNode} style={{ marginBottom: -3 }}>
-                                  1 + 1
-                                </div>
+                            <Tooltip overlay={`Duplicate`} placement={`top`}>
+                                <img
+                                  src={process.env.PUBLIC_URL + '/duplicate-node.svg'}
+                                  onClick={this.duplicateNode}
+                                  className={"pointer mr-5 ml-5 w-30 h-30"}
+                                />
                             </Tooltip>
                         </div>
                     </>
@@ -236,7 +244,7 @@ class EachTagManager extends React.Component {
                     <>
                         {/* Make it div */}
                         <SVGBlockToText onClick={this.makeItDiv} className={`pointer mr-10 ml-10`} style={{ transform: 'scaleX(-1' }} color={'#fff'} />
-                        <textarea className={`h-60`} rows="1" value={fragment} onChange={this.changeText} />
+                        <textarea onChange={this.changeText} className={`h-60`} rows="1" value={fragment} />
                     </>
                   )}
 
@@ -245,13 +253,27 @@ class EachTagManager extends React.Component {
                   {!first && (
                     <div className={`flex align-flex-end h-40`}>
                         {/* Delete */}
-                        <githubIcons.GiTrashCan onClick={this.deleteElement} title={'Delete'} size={23} className={`ml-5 mr-5`} style={{ marginBottom: 3 }}>x</githubIcons.GiTrashCan>
+
+                        <Tooltip overlay={'Delete'} placement={`top`}>
+                            <img
+                              src={process.env.PUBLIC_URL + '/trash.svg'}
+                              className={"pointer mr-5 ml-5 w-35 h-35"}
+                              onClick={this.deleteElement}
+                            />
+                        </Tooltip>
+                        {/*<githubIcons.GiTrashCan onClick={this.deleteElement} title={'Delete'} size={23} className={`ml-5 mr-5`} style={{ marginBottom: 3 }}>x</githubIcons.GiTrashCan>*/}
                         {/* Wrap with div */}
                         <Tooltip overlay={'Wrap with div'} placement={`top`}>
                             <img
                               src={process.env.PUBLIC_URL + '/wrap-with-div.svg'}
-                              title={'Wrap with div'}
                               onClick={this.wrapWithDiv}
+                              className={"pointer mr-5 ml-5 w-25 h-25"}
+                            />
+                        </Tooltip>
+                        <Tooltip overlay={'Wrap children'} placement={`top`}>
+                            <img
+                              src={process.env.PUBLIC_URL + '/wrap-children.svg'}
+                              onClick={this.wrapChildren}
                               className={"pointer mr-5 ml-5 w-25 h-25"}
                             />
                         </Tooltip>
@@ -290,7 +312,7 @@ class EachTagManager extends React.Component {
                           title={'Attri-butes: '}
                         />
                         <div className={`w-100-p`}>______________________________</div>
-                        <div className={`flex `}>
+                        <div className={``}>
                             <div className={`fz-17 mr-20 pt-5 bold`}>Content: </div>
                             {this.recursiveRenderChildren()}
                         </div>

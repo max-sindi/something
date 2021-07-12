@@ -12,12 +12,12 @@ const ObjectEditor = ({
     onChange,
     title = ""
 }) => {
-    const onNewFieldSelect = ({ target: {value: fieldValue}}) => {
-        debugger
-        return onChange({...value, [fieldValue]: value[fieldValue] || ''})
-    }
+    const onNewFieldSelect = ({ target: {value: fieldValue}}) => onChange({
+      ...value,
+      [fieldValue]: value[fieldValue] || ''
+    })
 
-    return (
+  return (
         <div className={`flex align-center flex-wrap`}>
             <div className={`w-100-p`}>_______________________________________</div>
             <div className={`w-100 bold mb-5 mr-15 fz-20`}>{title}</div>

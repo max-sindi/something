@@ -28,6 +28,15 @@ class Tag extends Component {
 
   state = this.initialState
 
+  componentDidUpdate() {
+    const shouldHighlight =_.get(this.props, 'popup.highlightFragment.id', true) === _.get(this.props, `fragment.id`, false)
+      && !this.state.hover
+
+    if(shouldHighlight) {
+      this.setState(s => ({...s, hover: true}))
+    }
+  }
+
   get attrs() {
 
     return {
@@ -45,6 +54,7 @@ class Tag extends Component {
         this.props.setPopup({
           coords: {top, left},
           fragment: this.props.fragment,
+          highlightFragment: this.props.fragment,
           domElement: event.target
         })
       },
