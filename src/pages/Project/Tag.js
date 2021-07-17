@@ -48,7 +48,7 @@ class Tag extends Component {
       style: toJS(this.props.fragment.style || {}),
       onClick: event => {
         event.stopPropagation()
-        event.preventDefault()
+        !event.metaKey && event.preventDefault() // enable native click with ctrl
         const top = event.clientY
         const left = event.clientX
         this.props.setPopup({

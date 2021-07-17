@@ -20,6 +20,7 @@ export const TagWrapperStyled = styled.div`
   padding-left: ${({deepLevel}) => `${deepLevel * 4}px`};
   border-radius: 14px;
   color: #cccccc;
+  transition: all 1s;
   ${({ popup, fragment }) => { 
 
     return _.get(popup, 'fragment.id', true) === _.get(fragment, 'id', false) ? 

@@ -5,7 +5,7 @@ export const generateColor = (deepLevel = 1, indexInLevel = 1, c = 1) => {
   // console.log(['#0E292A', '#29547A', '#1D584F', '#172845', '#7A292A', '#541C34', '#1B504F'][a])
   return ['#0E292A', '#29547A', '#1D584F', '#172845', '#7A292A', '#541C34', '#1B504F', '#BF75D1', '#C75798',
     '#A1365F', '#7A2941', '#4D192C'
-  ][deepLevel]
+  ][deepLevel] || "#289"
   // return `rgba(${  color()  })`
 
   // function color() {
