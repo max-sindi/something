@@ -40,9 +40,10 @@ class Tag extends Component {
   get attrs() {
 
     return {
+      'data-name': this.fragment.name || '',
       'data-deep-level': this.props.deepLevel + 1,
       'data-index-in-level': this.props.indexInLevel,
-      'data-name': this.fragment.name || '',
+      'title': this.fragment.name || '',
       'className': classNames(this.props.fragment.className, this.state.hover && 'tag_hover'),
       ...this.fragment.attrs || {},
       style: toJS(this.props.fragment.style || {}),

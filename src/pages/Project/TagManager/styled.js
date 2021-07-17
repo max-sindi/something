@@ -18,9 +18,12 @@ export const TagWrapperStyled = styled.div`
   // border: 1px solid #234589;
   padding: 3px;
   padding-left: ${({deepLevel}) => `${deepLevel * 4}px`};
+  padding-bottom: ${({deepLevel}) => `${ deepLevel === 0 ? 100 : 30}px`};
   border-radius: 14px;
   color: #cccccc;
   transition: all 1s;
+  box-sizing: content-box;
+  //padding-bottom: ${({ deepLevel }) => deepLevel === 1 ? `100` : `0`}px;
   ${({ popup, fragment }) => { 
 
     return _.get(popup, 'fragment.id', true) === _.get(fragment, 'id', false) ? 

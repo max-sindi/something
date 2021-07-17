@@ -37,7 +37,6 @@ const classGroups = classNames.classBranches.reduce((acc, classNameBranch) => {
   }
 }, {})
 
-console.log(classGroups)
 const options = {
     placeholder: "Class menu: ",
     options:  classGroupsExist.map(({ name }) => ({

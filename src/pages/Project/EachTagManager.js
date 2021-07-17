@@ -58,7 +58,8 @@ class EachTagManager extends React.Component {
     moveUpward = () => this.swapElements(this.props.indexInLevel - 1, this.props.indexInLevel)
     moveDownward = () => this.swapElements(this.props.indexInLevel, this.props.indexInLevel + 1)
     swapElements = (firstIndex, secondIndex) => this.transformParent(parent => {
-        const {children} = parent
+        const {children: childrenOriginal} = parent
+        const children = _.clone(childrenOriginal)
         const firstElement = children[firstIndex]
         const secondElement = children[secondIndex]
         children[firstIndex] = secondElement
@@ -68,8 +69,8 @@ class EachTagManager extends React.Component {
     onNameChange = ({target: {value: name}}) => this.transform(node => ({ ...node, name }))
     onAttrsChange = ({target: {value: attrs}}) => this.transform(node => ({ ...node, attrs }))
     setCurrentState = _.debounce( (...args) => _.setWith(...args), 1000)
-    save = _.debounce(() => this.props.save(this.props.currentState), 3000)
-    onTagSelect = ({target: {value: tag}}) => this.transform(node => ({ ...node, tag }))
+    save = _.debounce(() => this.props.save(this.props.currentState), 1200)
+    onTagSelect = ({target: {value: tag}}) => this.transform(node => ({...node, tag}))
     onParentClick = () => this.props.setPopup(old => ({ ...old, fragment: _.get(this.props.currentState.template, this.props.parentXpath)}))
     onFocusInspectClick = () => this.props.setPopup(old => ({ ...old, fragment: this.fragment}))
     onHightlight = () => this.props.setPopup(old => ({ ...old, highlightFragment: this.fragment}))
@@ -119,26 +120,29 @@ class EachTagManager extends React.Component {
       </select>
     )
 
-    recursiveRenderChildren = () => (
-      this.state.isOpened
-      &&
-      this.state.localFragmentState.children.map((child, index, arr) =>
-        <div key={index} className={`mt-5 w-100-p`}>
-            <EachTagManager
-              {...this.props}
-              first={false}
-              fragment={child}
-              key={child.id || String(this.props.deepLevel) + String(this.props.indexInLevel)}
-              deepLevel={this.props.deepLevel + 1}
-              indexInLevel={index}
-              parentXpath={this.props.xpath}
-              lastInLevel={index === arr.length - 1}
-              xpath={`${this.props.xpath}${this.props.xpath ? '.' : ''}children[${index}]`}
-              parentSetState={this.setState.bind(this)}
-            />
-        </div>
-      )
-    )
+    recursiveRenderChildren = () => {
+        // if(!this.state.localFragmentState.children) debugger
+        return (
+          this.state.isOpened
+          &&
+          (this.state.localFragmentState.children || []).map((child, index, arr) =>
+            <div key={index} className={`mt-5 w-100-p`}>
+                <EachTagManager
+                  {...this.props}
+                  first={false}
+                  fragment={child}
+                  key={child.id || String(this.props.deepLevel) + String(this.props.indexInLevel)}
+                  deepLevel={this.props.deepLevel + 1}
+                  indexInLevel={index}
+                  parentXpath={this.props.xpath}
+                  lastInLevel={index === arr.length - 1}
+                  xpath={`${this.props.xpath}${this.props.xpath ? '.' : ''}children[${index}]`}
+                  parentSetState={this.setState.bind(this)}
+                />
+            </div>
+          )
+        )
+    }
     stylesExisting = [
         {
             name: 'backgroundImage',
@@ -217,16 +221,11 @@ class EachTagManager extends React.Component {
                             <textarea value={fragment.name || ''} onChange={this.onNameChange} rows={1} className={`grow-1 ml-5`}/>
                         </div>
 
-
-                        <label className={'flex align-flex-end w-100-p mt-5 mb-5'} >
-                            <span className={`mr-10`}>Class: </span>
-                            <textarea value={fragment.className} onChange={this.changeClassName} rows={1} className={`grow-1 w-200`} />
-                        </label>
                         {/*<div className={`w-100-p flex align-center`}>*/}
                         {/*    <div className="mr-15">Attrs: </div>*/}
                         {/*    <textarea value={fragment.attrs || ''} onChange={this.onAttrsChange} className={`w-200 grow-1`} rows={1}/>*/}
                         {/*</div>*/}
-                        _____________________________________________
+                        {/*_____________________________________________*/}
 
                         <div className={`flex align-flex-end h-40`}>
                             <Tooltip overlay={'Add block'} placement={`top`}>
@@ -309,12 +308,13 @@ class EachTagManager extends React.Component {
                     </div>
                   )}
               </div>
-              _______________________________________________
+              {/*_______________________________________________*/}
               {!first && isObject && (
                 <>
                     <div className={`pt-5 pb-5 mt-10`}>
-                        <div>
+                        <div className={`flex`}>
                             <ClassNamesSelector onChange={this.changeClassNamesList} value={fragment.className}/>
+                            <textarea value={fragment.className} onChange={this.changeClassName} rows={2} className={`grow-1 w-200`} />
                         </div>
                         <ObjectEditor
                           onChange={this.createFieldUpdater('style')}
@@ -328,7 +328,7 @@ class EachTagManager extends React.Component {
                           fields={this.attrsExisting}
                           title={'Attri-butes: '}
                         />
-                        <div className={`w-100-p`}>______________________________</div>
+                        {/*<div className={`w-100-p`}>______________________________</div>*/}
                         <div className={``}>
                             <div className={`fz-17 mr-20 pt-5 bold`}>Content: </div>
                             {this.recursiveRenderChildren()}
