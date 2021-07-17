@@ -44,7 +44,6 @@ const ObjectEditor = ({
                     }
 
                     const onFieldSelect = ({ target: { value: fieldName }}) => {
-                        debugger
                         const clone = {...value}
                         clone[fieldName] = clone[name]
                         delete clone[name]
@@ -55,7 +54,7 @@ const ObjectEditor = ({
                       <div key={name} className={`flex align-center pt-5 pb-5`}>
                           <div className={`flex align-center w-100-p`}>
                               <select value={name} className={`ml-10`} onChange={onFieldSelect}>
-                                  {fields.map(({ name: fieldName }) => <option value={fieldName} label={fieldName}/>)}
+                                  {fields.map(({ name: fieldName }) => <option value={fieldName} label={fieldName} key={fieldName}/>)}
                               </select>
                               <FaRegWindowClose onClick={() => _delete(name)} size={20} className={`mr-10 ml-10 min-w-20`}/>
 
@@ -76,7 +75,7 @@ const ObjectEditor = ({
 
                 <div className={`w-100-p`}>
                     <select className={`ml-10 min-w-60`} onChange={onNewFieldSelect} value={``}>
-                        {[{name: ' '}, ...fields.filter(({ name }) => value[name] === undefined)].map(({ name }) => <option value={name} label={name}/>)}
+                        {[{name: ' '}, ...fields.filter(({ name }) => value[name] === undefined)].map(({ name }) => <option value={name} label={name} key={name}/>)}
                     </select>
                 </div>
             </div>

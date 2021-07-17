@@ -64,6 +64,7 @@ input {
   color: #232132;
   font-size: 14px;
   font-weight: 300;
+  padding: 3px;
 }
 
 .root-menu-container .menu-level-options-container.menu-level-options-container .options-label {

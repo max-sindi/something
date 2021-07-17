@@ -2,6 +2,11 @@ import React from 'react'
 import {FaRegWindowClose} from 'react-icons/fa'
 import classNames from '../../../stylotron/styles.json'
 import DropDownMenuSelect from 'react-nested-menu-selector'
+import _ from 'lodash'
+
+//   classNames.reduce((acc, cur) =>
+//
+// )
 
 // const selectGroups = classNames.classBranches.map(branch =>
 //   <optgroup label={branch.name}>
@@ -11,16 +16,41 @@ import DropDownMenuSelect from 'react-nested-menu-selector'
 //   </optgroup>
 // )
 
+
+
+const classGroupsExist = [
+  { name: 'Spacing', classNames: ['p', 'pt', 'pb', 'pl', 'pr', 'm', 'mt', 'mb', 'mr', 'ml', 'ml-a', 'mr-a']},
+  { name: 'Size', classNames: ['w', 'max-w', 'min-w', 'h', 'max-h', 'min-h']},
+  { name: 'Position', classNames: ['position', 'static', 't', 'r', 'l', 'b', 'l-a', 't-a']},
+  { name: 'Layout', classNames: ['container', 'display', 'flex', 'flex-column', 'flex-row', 'justify-content', 'align-items', 'flex-grow', 'flex-wrap' ,'flex-center', 'order']},
+  { name: 'Typography', classNames: ['fz', 'font-weight', 'black', 'white', 'pre-wrap', 'text-no-wrap', 'bold', 'text-wrap', 'text-align', 'ff-primary', 'color-white', 'text-transform']},
+  { name: "Other", classNames: []}
+]
+
+const classGroups = classNames.classBranches.reduce((acc, classNameBranch) => {
+  const group = classGroupsExist.find(({ classNames }) => classNames.includes(classNameBranch.name))
+    || _.last(classGroupsExist)
+
+  return {
+    ...acc,
+    [group.name]: !acc[group.name] ? [classNameBranch] : [...acc[group.name], classNameBranch]
+  }
+}, {})
+
+console.log(classGroups)
 const options = {
     placeholder: "Class menu: ",
-    options: classNames.classBranches.map(branch => ({
+    options:  classGroupsExist.map(({ name }) => ({
+      label: name,
+      options: classGroups[name].map(branch => ({
         label: branch.name,
         options: branch.classNames.map(className => ({
-            value: className.name,
-            label: className.name,
-            key: className.name
+          value: className.name,
+          label: className.name,
+          key: className.name
         })),
         key: branch.name
+      }))
     }))
 }
 

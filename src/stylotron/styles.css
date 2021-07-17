@@ -3388,8 +3388,6 @@
 .flex-column {flex-direction: column}
 .t-a {top: auto}
 .l-a {left: auto}
-.hero-bg {background: url(http://localhost:3000/hero-bg.png) center / center cover}
-.recruiting-hero-bg {background: url(http://localhost:3000/Recruting-hero.png) center / cover}
 .color-white {color: white}
 .ff-primary {font-family: Maitree}
 .black {color: #111}

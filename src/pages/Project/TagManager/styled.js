@@ -20,15 +20,35 @@ export const TagWrapperStyled = styled.div`
   padding-left: ${({deepLevel}) => `${deepLevel * 4}px`};
   border-radius: 14px;
   color: #cccccc;
-  ${({ popup, fragment }) => {
+  ${({ popup, fragment }) => { 
+
     return _.get(popup, 'fragment.id', true) === _.get(fragment, 'id', false) ? 
-            `position: absolute; 
-            top: ${popup.coords.top}px;
-            left: ${popup.coords.left}px
-            width: 400px;
-            overflow: auto;
-            max-height: 600px;
-            ` :
+            (() => {
+              const width = 430
+              const height = 700
+              const {innerWidth, innerHeight} = window
+
+              // define X point
+              const shouldRenderOnLeftSide = innerWidth - popup.coords.left > width
+              const xSide = shouldRenderOnLeftSide ? 'left' : 'right'
+              const xPoint = xSide === 'left' ? popup.coords.left : innerWidth - popup.coords.left
+
+              // define Y point
+              // not using for now 
+              const shouldRenderOnTopSide = innerHeight - popup.coords.top > height
+              const ySide = shouldRenderOnTopSide ? 'top' : 'bottom'
+              const yPoint = ySide === 'top' ? popup.coords.top : innerHeight - popup.coords.top
+
+              
+              return `
+                position: absolute;
+                top: ${popup.coords.top}px;
+                ${xSide}: ${xPoint}px;
+                width: ${width}px;
+                overflow: auto;
+                max-height: ${height}px;
+              `
+            })() :
             ''
   }}
   
