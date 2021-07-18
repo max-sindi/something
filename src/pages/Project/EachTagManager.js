@@ -146,15 +146,23 @@ class EachTagManager extends React.Component {
     stylesExisting = [
         {
             name: 'backgroundImage',
-            fileSelectable: true,
+            withFile: true,
             fileValueCreator: fileName => `url('http://localhost:8000${fileName}')`
+        },
+        {
+            name: 'backgroundColor',
+            withVariable: true
+        },
+        {
+            name: 'borderColor',
+            withVariable: true
         }
     ]
 
     attrsExisting = [
         {
             name: 'src',
-            fileSelectable: true,
+            withFile: true,
             fileValueCreator: fileName => `http://localhost:8000${fileName}`
         },
         {

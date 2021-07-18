@@ -21,6 +21,10 @@ class Project {
         driver.project.update(data).then(_.noop)
     }
 
+    updateVariables(data: any) {
+        driver.project.updateVariables(data).then(this.fetchState)
+    }
+
     loadAsset(asset: any) {
         driver.project.loadAsset(asset).then(this.fetchState)
     }

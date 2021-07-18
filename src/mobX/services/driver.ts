@@ -30,7 +30,8 @@ class AppHttpDriver {
     project = {
         fetch: this.driver.get('/z'),
         update: this.driver.post('/z'),
-        loadAsset: this.driver.post('/z/asset')
+        loadAsset: this.driver.post('/z/asset'),
+        updateVariables: this.driver.post('/variables')
     }
 
     online = {

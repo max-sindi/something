@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import Variables from './Variables'
 // import Dropzone from "../../../components/Dropzone"
 // import {observer} from "mobx-react"
 // import project from "../../mobX/project"
@@ -19,11 +20,13 @@ class AppManager extends React.Component {
 
   render() {
     return (
-      <div className={'app-manager'}>
+      <div className={'app-manager pt-20 pb-20'}>
         <form action="http://localhost:8000/api/z/asset" method="post" encType="multipart/form-data">
           <input type="file" name="asset" multiple={true}/>
           <input type="submit"/>
+
         </form>
+        <Variables />
       </div>
     )
   }
