@@ -12,12 +12,15 @@ import SVGBlockToText from '../../components/svg/BlockToText'
 import Tooltip from 'rc-tooltip'
 import {closePopup} from './hook/popup'
 import { v4 as uuid } from 'uuid'
+import {CopyToClipboard} from 'react-copy-to-clipboard'
+
 
 class EachTagManager extends React.Component {
     state = {
         isOpened: true, // @todo false
         localFragmentState: null // local state for improving performance
     }
+
     static propTypes = {
         indexInLevel: PropTypes.number,
         deepLevel: PropTypes.number,
@@ -32,31 +35,67 @@ class EachTagManager extends React.Component {
     get breadcrumbsInTree() {
         return this.props.breadcrumbs
     }
+
     get fragment() {
         return this.state.localFragmentState
     }
+
     componentDidMount() {
         console.log('Mounted')
         this.setState(old => ({...old, localFragmentState: this.props.fragment}))
     }
 
+
     createFieldUpdater = (path) => value => this.transform(old => ({ ...old, [path]: value }))
+
     toggleVisibility = () => this.setState(state => ({ isOpened: !state.isOpened }))
+
     addNewChild = async (creator = () => this.createNode()) =>
-      this.transform(node => ({...node, children: [...node.children, creator()]}))
+      this.transform(node => {
+          debugger
+          return ({...node, children: [...node.children, creator()]})
+      })
+
     transformParent = (transformer) => this.transform(transformer, this.props.parentXpath)
+
     deleteElement = () => this.transformParent(parent => ({...parent,
         children: parent.children.filter((i, index) => index !== this.props.indexInLevel)}))
+
     makeItText = () => this.transform('')
+
     makeItDiv = () => this.transform(node => this.createNode())
+
     changeText = (evt) => this.transform(evt.target.value)
+
+    changeTextPastedData = (evt) => evt.persist() || this.setState(state => ({...state, pastedData: evt.target.value}))
+
+    addNewChildFromPasted = () => {
+        const parsedData = (() => {
+            try {
+                return JSON.parse(this.state.pastedData)
+            } catch (e) {
+                console.error(e)
+            }
+        })()
+
+        parsedData
+            && this.transform(node => ({...node, children: [...node.children, this.cloneDeepWithUniqueId(parsedData)]}))
+    }
+
     changeClassName = evt => this.transform((val) => ({...val, className: evt.target.value}))
+
     changeClassNamesList = className => this.transform(val => ({...val, className}))
+
     wrapWithDiv = () => this.transform(node => ({...this.createNode(), children: [node]}))
+
     wrapChildren = () => this.transform(node => ({...node, children: [this.createNode(this.fragment.children)]}))
+
     setOnParent = () => this.transformParent(node => ({...this.state.localFragmentState, children: node.children.filter((item, index) => index !== this.props.indexInLevel)}))
+
     moveUpward = () => this.swapElements(this.props.indexInLevel - 1, this.props.indexInLevel)
+
     moveDownward = () => this.swapElements(this.props.indexInLevel, this.props.indexInLevel + 1)
+
     swapElements = (firstIndex, secondIndex) => this.transformParent(parent => {
         const {children: childrenOriginal} = parent
         const children = _.clone(childrenOriginal)
@@ -66,15 +105,25 @@ class EachTagManager extends React.Component {
         children[secondIndex] = firstElement
         return {...parent, children}
     })
+
     onNameChange = ({target: {value: name}}) => this.transform(node => ({ ...node, name }))
+
     onAttrsChange = ({target: {value: attrs}}) => this.transform(node => ({ ...node, attrs }))
+
     setCurrentState = _.debounce( (...args) => _.setWith(...args), 1000)
+
     save = _.debounce(() => this.props.save(this.props.currentState), 1200)
+
     onTagSelect = ({target: {value: tag}}) => this.transform(node => ({...node, tag}))
+
     onParentClick = () => this.props.setPopup(old => ({ ...old, fragment: _.get(this.props.currentState.template, this.props.parentXpath)}))
+
     onFocusInspectClick = () => this.props.setPopup(old => ({ ...old, fragment: this.fragment}))
+
     onHightlight = () => this.props.setPopup(old => ({ ...old, highlightFragment: this.fragment}))
+
     cloneDeepWithUniqueId = (data) => _.cloneDeepWith(data, target => ({...target, id: uuid()}))
+
     createNode = (children = []) => ({
         children,
         tag: 'div',
@@ -83,12 +132,14 @@ class EachTagManager extends React.Component {
         attrs: {},
         id: uuid()
     })
+
     duplicateNode = () => this.transformParent(parent => {
         return ({
             ...parent,
             children: [...parent.children, this.cloneDeepWithUniqueId(parent.children[this.props.indexInLevel])]
         })
     })
+
     transform = (updater, xpath = this.props.xpath) => {
         const isParentTransform = xpath === this.props.parentXpath
         const firstTwoArgs = [
@@ -143,6 +194,7 @@ class EachTagManager extends React.Component {
           )
         )
     }
+
     stylesExisting = [
         {
             name: 'backgroundImage',
@@ -155,6 +207,14 @@ class EachTagManager extends React.Component {
         },
         {
             name: 'borderColor',
+            withVariable: true
+        },
+        {
+            name: 'color',
+            withVariable: true
+        },
+        {
+            name: 'lineHeight',
             withVariable: true
         }
     ]
@@ -173,7 +233,7 @@ class EachTagManager extends React.Component {
         },
     ]
 
-    tags = ['div', 'span', 'input', 'img', 'a', 'button']
+    tags = ['div', 'span', 'input', 'img', 'a', 'button', 'h1', 'h2', 'h3', 'h4']
 
     render() {
         if(_.isNull(this.fragment)) return null
@@ -193,6 +253,14 @@ class EachTagManager extends React.Component {
                       {parentXpath && <button className={`ml-20 black pointer fz-13`} onClick={this.onParentClick}>Parent</button>}
                       <button className={`ml-20 black pointer fz-13`} onClick={this.onFocusInspectClick}>Focus</button>
                       <button className={`ml-20 black pointer fz-13`} onClick={this.onHightlight}>Hightlight</button>
+                      <CopyToClipboard text={JSON.stringify(fragment)} onCopy={() => alert('Copied')}>
+                        <button className={`black pointer fz-13 `} style={{background: "transparent", border: 0}}>
+                            <img
+                              src={process.env.PUBLIC_URL + '/copy-icon.svg'}
+                              className={"pointer mr-5 ml-5 w-30 h-30"}
+                            />
+                        </button>
+                      </CopyToClipboard>
                   </div>
 
                   {/* Close Popup */}
@@ -238,6 +306,13 @@ class EachTagManager extends React.Component {
                         <div className={`flex align-flex-end h-40`}>
                             <Tooltip overlay={'Add block'} placement={`top`}>
                                 <AiOutlineFileAdd size={22} onClick={() => this.addNewChild()} title={'Add block +'} className={`mr-10 pointer`} style={{ marginBottom: 2 }} />
+                            </Tooltip>
+                            <Tooltip
+                              overlay={<textarea rows="10" placeholder={'Add Child by Paste'} value={this.state.pastedData} onChange={this.changeTextPastedData}/>
+                              }
+                              placement={`top`}
+                            >
+                                <AiOutlineFileAdd size={22} onClick={this.addNewChildFromPasted} className={`mr-10 pointer`} style={{ marginBottom: 2 }} />
                             </Tooltip>
                             <Tooltip overlay={'Add text'} placement={`top`}>
                                 <div onClick={() => this.addNewChild(() => '')} title={'Add text +'} className={`mr-10 pointer`} style={{ marginBottom: 2 }} >+ A</div>
@@ -322,7 +397,7 @@ class EachTagManager extends React.Component {
                     <div className={`pt-5 pb-5 mt-10`}>
                         <div className={`flex`}>
                             <ClassNamesSelector onChange={this.changeClassNamesList} value={fragment.className}/>
-                            <textarea value={fragment.className} onChange={this.changeClassName} rows={2} className={`grow-1 w-200`} />
+                            <textarea value={fragment.className} onChange={this.changeClassName} rows={2} className={`grow-1 max-w-120 ml-a`} />
                         </div>
                         <ObjectEditor
                           onChange={this.createFieldUpdater('style')}

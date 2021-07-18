@@ -23,7 +23,7 @@ const classGroupsExist = [
   { name: 'Size', classNames: ['w', 'max-w', 'min-w', 'h', 'max-h', 'min-h']},
   { name: 'Position', classNames: ['position', 'static', 't', 'r', 'l', 'b', 'l-a', 't-a']},
   { name: 'Layout', classNames: ['container', 'display', 'flex', 'flex-column', 'flex-row', 'justify-content', 'align-items', 'flex-grow', 'flex-wrap' ,'flex-center', 'order']},
-  { name: 'Typography', classNames: ['fz', 'font-weight', 'black', 'white', 'pre-wrap', 'text-no-wrap', 'bold', 'text-wrap', 'text-align', 'ff-primary', 'color-white', 'text-transform']},
+  { name: 'Typography', classNames: ['fz', 'font-weight', 'black', 'white', 'pre-wrap', 'text-no-wrap', 'bold', 'text-wrap', 'text-align', 'ff-primary', 'ff-secondary', 'color-white', 'text-transform', 'lh']},
   { name: "Other", classNames: []}
 ]
 
@@ -54,31 +54,32 @@ const options = {
 }
 
 const ClassNamesSelector = ({ value = '', onChange, ...props }) => {
-    const deconstructed = value.trim().split(' ')
-    const _delete = cls => onChange(deconstructed.filter(i => i !== cls).join(' '))
-    const onClick = newValue => onChange(value + ' ' + newValue)
-    return (
-        <div className={`d-flex align-center pointer`}>
-            <DropDownMenuSelect
-                values={options}
-                handleOnClick={onClick}
-                className={"max-h-200"}
-            />
-          {/*<select onChange={evt => onChange(value + ' ' + evt.target.value)} className={`mr-20`}>*/}
-          {/*  {selectGroups}*/}
-          {/*</select>*/}
-            <div className={`w-100-p flex flex-wrap max-h-100 flex-column align-flex-start`}>
-                  {value && deconstructed.map(cls =>
-                      (
-                          <div className={`mr-5 flex align-center text-no-wrap`} key={cls}>
-                              <FaRegWindowClose onClick={() => _delete(cls)} size={14} className={`mr-5`}/>
-                              .{cls}
-                          </div>
-                        )
-                  )}
+  const deconstructed = value.trim().split(' ')
+  const _delete = cls => onChange(deconstructed.filter(i => i !== cls).join(' '))
+  const onClick = newValue => onChange(value + ' ' + newValue)
+
+  return (
+    <div className={`d-flex align-center pointer`}>
+      <DropDownMenuSelect
+        values={options}
+        handleOnClick={onClick}
+        className={"max-h-200"}
+      />
+      {/*<select onChange={evt => onChange(value + ' ' + evt.target.value)} className={`mr-20`}>*/}
+      {/*  {selectGroups}*/}
+      {/*</select>*/}
+      <div className={`w-100-p flex flex-wrap max-h-100 flex-column align-flex-start`}>
+        {value && deconstructed.map(cls =>
+          (
+            <div className={`mr-5 flex align-center text-no-wrap`} key={cls}>
+              <FaRegWindowClose onClick={() => _delete(cls)} size={14} className={`mr-5`}/>
+              .{cls}
             </div>
-        </div>
-    )
+          )
+        )}
+      </div>
+    </div>
+  )
 }
 
 export default ClassNamesSelector

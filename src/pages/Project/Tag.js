@@ -34,24 +34,26 @@ class Tag extends Component {
 
     if(shouldHighlight) {
       this.setState(s => ({...s, hover: true}))
+    } else {
+      // turn off highlight
+      // this.props.popup.highlightFragment && this.state.hover && this.setState(s => ({...s, hover: false}))
     }
   }
 
   get attrs() {
-
     return {
       'data-name': this.fragment.name || '',
       'data-deep-level': this.props.deepLevel + 1,
       'data-index-in-level': this.props.indexInLevel,
-      'title': this.fragment.name || '',
+      'title': _.capitalize(this.fragment.name || ''),
       'className': classNames(this.props.fragment.className, this.state.hover && 'tag_hover'),
       ...this.fragment.attrs || {},
       style: toJS(this.props.fragment.style || {}),
       onClick: event => {
         event.stopPropagation()
         !event.metaKey && event.preventDefault() // enable native click with ctrl
-        const top = event.clientY
-        const left = event.clientX
+        const top = event.clientY + window.scrollY
+        const left = event.clientX + window.scrollX
         this.props.setPopup({
           coords: {top, left},
           fragment: this.props.fragment,

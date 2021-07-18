@@ -24,7 +24,9 @@ const classNames = [
     new CssUnitClassBranch({ className: "t",           property: "top",             media: true,  percent:      200,    each5ValuesLimit: 200, eachValueLimit: 15,  px: true, minus: true}),
     new CssUnitClassBranch({ className: "b",           property: "bottom",          media: true,  percent:      200,    each5ValuesLimit: 200, eachValueLimit: 15,  px: true, minus: true}),
     new CssUnitClassBranch({ className: "fz",          property: "font-size",       media: true,  percent:      200,    eachValueLimit: 50,     px: true}),
-    new CssUnitClassBranch({ className: "border-radius", property: "border-radius",                                     eachValueLimit: 10,     px: true}),
+    new CssUnitClassBranch({ className: "border-radius", property: "border-radius", eachValueLimit: 10,     px: true}),
+    new CssUnitClassBranch({ className: "border-width", property: "border-width", eachValueLimit: 10,     px: true}),
+    new CssUnitClassBranch({ className: "lh", property: "line-height", eachValueLimit: 100,     px: true}),
     new CssUnitClassBranch({ className: "z-index",     property: "z-index",         media: true,                        eachValueLimit: 40,     minus: true }),
     new CssUnitClassBranch({ className: "order",       property: "order",           media: true,                        eachValueLimit: 10,     after: false, before: false}),
 
@@ -54,6 +56,13 @@ const classNames = [
         ]
     }),
     new CssSimpleClassBranch({
+        property: "border-style",
+        classNameCreator: mdf => mdf,
+        values: [
+            'solid', 'dashed'
+        ]
+    }),
+    new CssSimpleClassBranch({
         property: "text-align",
         classNameCreator: mdf => `text-${mdf}`,
         values: [
@@ -77,10 +86,6 @@ const classNames = [
     new CssSimpleClassBranch({ className: "text-no-wrap",    fast: "white-space: nowrap", media: true }),
     new CssSimpleClassBranch({ className: "bold",        fast: "font-weight: 700" }),
     new CssSimpleClassBranch({ className: "pointer",        fast: "cursor: pointer" }),
-    ...[
-        { className: "flex-column", fast: "flex-direction: column" }
-    ].map(config => new CssSimpleClassBranch(config)),
-
     // new CssSimpleClassBranch({ className: "fw-bold",     fast: "font-weight: 700" }),
     // new CssSimpleClassBranch({ className: "ls-027",      fast: "letter-spacing: 0.27px" }),
     // new CssSimpleClassBranch({ className: "ls-05",       fast: "letter-spacing: 0.54px" }),
@@ -103,16 +108,24 @@ const classNames = [
     }),
     new CssSimpleClassBranch({
         className: 'ff-primary',
-        fast: `font-family: Maitree`
+        fast: `font-family: "Maitree"`
+    }),
+    new CssSimpleClassBranch({
+        className: 'ff-secondary',
+        fast: `font-family: "Raleway"`
     }),
     new CssSimpleClassBranch({
         className: 'black',
         fast: `color: #111`
     }),
     new CssSimpleClassBranch({
+        className: "flex-column",
+        fast: "flex-direction: column"
+    }),
+    new CssSimpleClassBranch({
         classNameCreator: mdf => `fw-${mdf}`,
         property: `font-weight`,
-        values: ['300', '500', '700', '800']
+        values: ['300', '400', '500', '600', '700', '800', '900']
     }),
     new CssSimpleClassBranch({
         classNameCreator: mdf => mdf,
